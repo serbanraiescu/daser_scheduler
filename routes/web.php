@@ -2,50 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
-    // Deployment trigger v1.0.1
-    return view('welcome');
-});
-
-// Temporary migration route for cPanel setup
-Route::get('/migrate', function() {
-    try {
-        Artisan::call('migrate', ['--force' => true]);
-        return "Migration successful! Output: " . Artisan::output();
-    } catch (\Exception $e) {
-        return "Error during migration: " . $e->getMessage();
-    }
-});
-
-// Wipe and re-run migrations (Use only for initial setup!)
-Route::get('/migrate-fresh', function() {
-    try {
-        Artisan::call('migrate:fresh', ['--force' => true]);
-        return "Migration Fresh successful! Output: " . Artisan::output();
-    } catch (\Exception $e) {
-        return "Error during migrate:fresh: " . $e->getMessage();
-    }
-});
-
-// Clear cache if .env changes aren't reflecting
-Route::get('/clear', function() {
-    Artisan::call('config:clear');
-    Artisan::call('cache:clear');
-    Artisan::call('view:clear');
-    return "All caches cleared!";
-});
-
-// Debug DB Config (Masked)
-Route::get('/debug-db', function() {
-    return [
-        'host' => config('database.connections.mysql.host'),
-        'database' => config('database.connections.mysql.database'),
-        'username' => config('database.connections.mysql.username'),
-        'password_length' => strlen(config('database.connections.mysql.password')),
-        'env_file_exists' => file_exists(base_path('.env')),
-    ];
+    return redirect()->route('bookings.index');
 });
 
 Route::middleware(['check.license'])->group(function () {
