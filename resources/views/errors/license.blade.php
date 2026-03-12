@@ -1,33 +1,78 @@
-<x-guest-layout>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg text-center">
-            <div class="mb-4 text-red-600">
-                <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-            </div>
-            
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">Licență Invalidă sau Expirată</h1>
-            <p class="text-gray-600 mb-6">
-                @if($status->status === 'denied')
-                    Accesul la această aplicație a fost suspendat. Vă rugăm să contactați administratorul sau să verificați cheia de licență.
-                @else
-                    Aplicația nu a putut verifica licența în ultimele 48 de ore. Este necesară o conexiune la internet pentru re-validare.
-                @endif
-            </p>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Licență Necesară - Daser Scheduler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .card {
+            background-color: var(--card);
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+        h1 { margin: 0 0 16px 0; font-size: 24px; }
+        p { color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .status-badge {
+            display: block;
+            margin-top: 24px;
+            font-size: 12px;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">🔒</div>
+        <h1>Activare Necesară</h1>
+        <p>Aplicația Daser Scheduler necesită o licență validă pentru a funcționa. Te rugăm să intri în panoul de administrare pentru a introduce cheia de licență.</p>
+        
+        <a href="{{ url('/login') }}" class="btn">Autentifică-te ca Admin</a>
 
-            <div class="space-y-4">
-                <form action="{{ route('admin.license.reverify') }}" method="POST">
-                    @csrf
-                    <x-primary-button class="w-full justify-center">
-                        Re-verifică Licența
-                    </x-primary-button>
-                </form>
-
-                <a href="{{ route('login') }}" class="text-sm text-indigo-600 hover:text-indigo-900">
-                    Autentificare Administrator
-                </a>
-            </div>
-        </div>
+        @if(isset($status))
+            <span class="status-badge">Status: {{ $status->status }}</span>
+        @endif
     </div>
-</x-guest-layout>
+</body>
+</html>
