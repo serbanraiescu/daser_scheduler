@@ -2,10 +2,21 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     // Deployment trigger v1.0.1
     return view('welcome');
+});
+
+// Temporary migration route for cPanel setup
+Route::get('/migrate', function() {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return "Migration successful! Output: " . Artisan::output();
+    } catch (\Exception $e) {
+        return "Error during migration: " . $e->getMessage();
+    }
 });
 
 Route::middleware(['check.license'])->group(function () {
