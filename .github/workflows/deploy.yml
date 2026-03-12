@@ -37,6 +37,7 @@ jobs:
         run: |
           sed -i "s|require __DIR__.'/../vendor/autoload.php'|require __DIR__.'/../daser_scheduler/vendor/autoload.php'|g" public/index.php
           sed -i "s|require_once __DIR__.'/../bootstrap/app.php'|require_once __DIR__.'/../daser_scheduler/bootstrap/app.php'|g" public/index.php
+          sed -i "s|__DIR__.'/../storage/framework/maintenance.php'|__DIR__.'/../daser_scheduler/storage/framework/maintenance.php'|g" public/index.php
 
       - name: 📂 Sync Core App (daser_scheduler)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

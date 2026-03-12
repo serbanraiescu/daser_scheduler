@@ -4,7 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('bookings.index');
+    // Deployment trigger v1.0.1
+    return view('welcome');
 });
 
 Route::middleware(['check.license'])->group(function () {
