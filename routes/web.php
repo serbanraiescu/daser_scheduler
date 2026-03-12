@@ -19,6 +19,25 @@ Route::get('/migrate', function() {
     }
 });
 
+// Clear cache if .env changes aren't reflecting
+Route::get('/clear', function() {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    return "All caches cleared!";
+});
+
+// Debug DB Config (Masked)
+Route::get('/debug-db', function() {
+    return [
+        'host' => config('database.connections.mysql.host'),
+        'database' => config('database.connections.mysql.database'),
+        'username' => config('database.connections.mysql.username'),
+        'password_length' => strlen(config('database.connections.mysql.password')),
+        'env_file_exists' => file_exists(base_path('.env')),
+    ];
+});
+
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
     Route::get('/book/employee', [\App\Http\Controllers\PublicBookingController::class, 'selectEmployee'])->name('bookings.employee');
