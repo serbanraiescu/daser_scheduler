@@ -19,9 +19,9 @@
                             </div>
 
                             <div>
-                                <x-input-label for="duration" :value="__('Duration (minutes)')" />
-                                <x-text-input id="duration" class="block mt-1 w-full" type="number" name="duration" :value="old('duration')" required />
-                                <x-input-error :messages="$errors->get('duration')" class="mt-2" />
+                                <x-input-label for="duration_minutes" :value="__('Duration (minutes)')" />
+                                <x-text-input id="duration_minutes" class="block mt-1 w-full" type="number" name="duration_minutes" :value="old('duration_minutes')" required />
+                                <x-input-error :messages="$errors->get('duration_minutes')" class="mt-2" />
                             </div>
 
                             <div>

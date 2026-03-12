@@ -34,6 +34,12 @@
                             </div>
 
                             <div>
+                                <x-input-label for="birth_date" :value="__('Birth Date')" />
+                                <x-text-input id="birth_date" class="block mt-1 w-full" type="date" name="birth_date" :value="old('birth_date', $client->birth_date ? $client->birth_date->format('Y-m-d') : '')" />
+                                <x-input-error :messages="$errors->get('birth_date')" class="mt-2" />
+                            </div>
+
+                            <div>
                                 <x-input-label for="tags" :value="__('Tags (comma separated)')" />
                                 <x-text-input id="tags" class="block mt-1 w-full" type="text" name="tags" :value="old('tags', $tagsString)" placeholder="VIP, Loyal, New" />
                                 <x-input-error :messages="$errors->get('tags')" class="mt-2" />

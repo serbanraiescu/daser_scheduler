@@ -34,11 +34,11 @@
                             @foreach($services as $service)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $service->name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $service->duration }} min</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $service->duration_minutes }} min</td>
                                 <td class="px-6 py-4 whitespace-nowrap">${{ number_format($service->price, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $service->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $service->is_active ? 'Active' : 'Inactive' }}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $service->active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $service->active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

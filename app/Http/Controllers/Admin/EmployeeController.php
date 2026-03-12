@@ -4,18 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Employee;
+use App\Models\Service;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = \App\Models\User::where('role', 'employee')->get();
+        $employees = User::where('role', 'employee')->with('employee')->get();
         return view('admin.employees.index', compact('employees'));
     }
 
     public function create()
     {
-        $services = \App\Models\Service::all();
+        $services = Service::all();
         return view('admin.employees.create', compact('services'));
     }
 
@@ -30,12 +33,17 @@ class EmployeeController extends Controller
             'services.*' => 'exists:services,id',
         ]);
 
-        $employee = \App\Models\User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => bcrypt($validated['password']),
             'role' => 'employee',
+        ]);
+
+        $employee = Employee::create([
+            'user_id' => $user->id,
+            'active' => true,
         ]);
 
         if (!empty($validated['services'])) {
@@ -45,17 +53,24 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employees.index')->with('success', 'Employee created successfully.');
     }
 
-    public function edit(\App\Models\User $employee)
+    public function edit(User $employee)
     {
         if ($employee->role !== 'employee') {
             abort(403);
         }
-        $services = \App\Models\Service::all();
-        $employeeServices = $employee->services->pluck('id')->toArray();
+        
+        $employeeData = $employee->employee;
+        if (!$employeeData) {
+            $employeeData = Employee::create(['user_id' => $employee->id]);
+        }
+
+        $services = Service::all();
+        $employeeServices = $employeeData->services->pluck('id')->toArray();
+        
         return view('admin.employees.edit', compact('employee', 'services', 'employeeServices'));
     }
 
-    public function update(Request $request, \App\Models\User $employee)
+    public function update(Request $request, User $employee)
     {
         if ($employee->role !== 'employee') {
             abort(403);
@@ -68,25 +83,27 @@ class EmployeeController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
             'services' => 'array',
             'services.*' => 'exists:services,id',
+            'active' => 'boolean',
         ]);
 
-        $updateData = [
+        $employee->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-        ];
+        ]);
 
         if (!empty($validated['password'])) {
-            $updateData['password'] = bcrypt($validated['password']);
+            $employee->update(['password' => bcrypt($validated['password'])]);
         }
 
-        $employee->update($updateData);
-        $employee->services()->sync($validated['services'] ?? []);
+        $employeeData = $employee->employee;
+        $employeeData->update(['active' => $request->has('active')]);
+        $employeeData->services()->sync($validated['services'] ?? []);
 
         return redirect()->route('admin.employees.index')->with('success', 'Employee updated successfully.');
     }
 
-    public function destroy(\App\Models\User $employee)
+    public function destroy(User $employee)
     {
         if ($employee->role !== 'employee') {
             abort(403);

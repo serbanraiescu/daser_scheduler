@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('waitlists', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->string('client_name');
+            $table->string('client_phone');
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->comment('Preferred employee')->constrained()->onDelete('cascade');
-            $table->date('preferred_date');
-            $table->string('status')->default('pending')->comment('pending, called, booked, cancelled');
+            $table->foreignId('employee_id')->constrained('users')->onDelete('cascade');
+            $table->date('date');
+            $table->boolean('notified')->default(false);
             $table->timestamps();
         });
     }

@@ -70,10 +70,33 @@
                 },
                 editable: true,
                 selectable: true,
-                events: '/admin/api/bookings', // Need to implement this
+                events: '/admin/api/bookings',
                 eventDrop: function(info) {
-                    // Need to implement update API
-                    console.log(info.event.start);
+                    let start = info.event.start.toISOString();
+                    let end = info.event.end.toISOString();
+                    
+                    fetch(`/admin/api/bookings/${info.event.id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            start: start,
+                            end: end
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            info.revert();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        info.revert();
+                    });
                 },
                 select: function(info) {
                     // Logic for manual booking

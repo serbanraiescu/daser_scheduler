@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
-    protected $fillable = ['name', 'description', 'duration', 'price', 'is_active'];
+    protected $fillable = ['name', 'duration_minutes', 'price', 'description', 'active'];
 
     public function bookings()
     {
@@ -15,7 +15,7 @@ class Service extends Model
 
     public function employees()
     {
-        return $this->belongsToMany(User::class, 'employee_service', 'service_id', 'user_id');
+        return $this->belongsToMany(Employee::class, 'employee_services');
     }
 
     public function waitlists()

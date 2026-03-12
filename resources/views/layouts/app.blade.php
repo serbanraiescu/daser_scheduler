@@ -17,6 +17,7 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
+            <x-license-alerts />
 
             <!-- Page Heading -->
             @isset($header)

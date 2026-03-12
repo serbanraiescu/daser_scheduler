@@ -7,14 +7,33 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $fillable = [
-        'client_id', 'user_id', 'service_id', 'start_time', 'end_time', 
-        'status', 'notes', 'management_link', 'price_at_booking'
+        'client_id', 'employee_id', 'service_id', 'date', 
+        'start_time', 'end_time', 'status', 'manage_token', 'notes'
     ];
 
     protected $casts = [
+        'date' => 'date',
         'start_time' => 'datetime',
         'end_time' => 'datetime',
     ];
+
+    /**
+     * Check if a new booking overlaps with existing bookings.
+     * Condition: (new_start < existing_end) AND (new_end > existing_start)
+     */
+    public static function isOverlapping($employeeId, $startTime, $endTime, $excludeBookingId = null)
+    {
+        $query = self::where('employee_id', $employeeId)
+            ->where('status', '!=', 'cancelled')
+            ->where('start_time', '<', $endTime)
+            ->where('end_time', '>', $startTime);
+
+        if ($excludeBookingId) {
+            $query->where('id', '!=', $excludeBookingId);
+        }
+
+        return $query->exists();
+    }
 
     public function client()
     {
@@ -23,7 +42,7 @@ class Booking extends Model
 
     public function employee()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'employee_id');
     }
 
     public function service()

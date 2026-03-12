@@ -47,6 +47,14 @@
                             </div>
 
                             <div>
+                                <label class="inline-flex items-center">
+                                    <input type="hidden" name="active" value="0">
+                                    <input type="checkbox" name="active" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ ($employee->employee && $employee->employee->active) ? 'checked' : '' }}>
+                                    <span class="ml-2 text-sm text-gray-600">{{ __('Active') }}</span>
+                                </label>
+                            </div>
+
+                            <div>
                                 <x-input-label :value="__('Assigned Services')" />
                                 <div class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
                                     @foreach($services as $service)

@@ -4,26 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Booking;
+use App\Models\User;
+use App\Models\Service;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $today = now()->startOfDay();
-        $bookingsToday = \App\Models\Booking::whereDate('start_time', $today)->count();
-        $revenueToday = \App\Models\Booking::whereDate('start_time', $today)
-            ->where('status', '!=', 'cancelled')
-            ->sum('price_at_booking');
+        $today = now()->format('Y-m-d');
         
-        $upcomingBookings = \App\Models\Booking::where('start_time', '>', now())
+        $bookingsToday = Booking::where('date', $today)->count();
+        
+        $revenueToday = Booking::where('date', $today)
+            ->where('status', '!=', 'cancelled')
+            ->join('services', 'bookings.service_id', '=', 'services.id')
+            ->sum('services.price');
+        
+        $upcomingBookings = Booking::where('date', '>=', $today)
             ->where('status', 'confirmed')
             ->with(['client', 'employee', 'service'])
+            ->orderBy('date')
             ->orderBy('start_time')
             ->limit(5)
             ->get();
 
-        $employees = \App\Models\User::where('role', 'employee')->get();
-        $services = \App\Models\Service::where('is_active', true)->get();
+        $employees = User::where('role', 'employee')->get();
+        $services = Service::where('active', true)->get();
 
         return view('admin.dashboard', compact(
             'bookingsToday', 

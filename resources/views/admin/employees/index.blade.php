@@ -25,6 +25,7 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Services</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
@@ -35,11 +36,18 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $employee->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $employee->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @foreach($employee->services as $service)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
-                                            {{ $service->name }}
-                                        </span>
-                                    @endforeach
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ ($employee->employee && $employee->employee->active) ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ ($employee->employee && $employee->employee->active) ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($employee->employee)
+                                        @foreach($employee->employee->services as $service)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
+                                                {{ $service->name }}
+                                            </span>
+                                        @endforeach
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <a href="{{ route('admin.employees.edit', $employee) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>

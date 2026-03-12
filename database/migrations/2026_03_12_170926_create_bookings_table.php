@@ -14,15 +14,18 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->comment('The employee assigned')->constrained()->onDelete('cascade');
+            $table->foreignId('employee_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
+            $table->date('date');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->string('status')->default('confirmed')->comment('confirmed, completed, cancelled, no_show');
+            $table->string('status')->default('confirmed'); // confirmed, completed, cancelled, no_show
+            $table->string('manage_token')->unique();
             $table->text('notes')->nullable();
-            $table->string('management_link')->unique();
-            $table->decimal('price_at_booking', 10, 2);
             $table->timestamps();
+
+            $table->index(['employee_id', 'date'], 'bookings_employee_date');
+            $table->index('client_id', 'bookings_client');
         });
     }
 

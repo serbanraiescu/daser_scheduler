@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Client extends Model
 {
-    protected $fillable = ['name', 'phone', 'email', 'notes', 'tags'];
+    use Notifiable;
+    protected $fillable = ['name', 'phone', 'email', 'birth_date', 'notes'];
 
     protected $casts = [
-        'tags' => 'array',
+        'birth_date' => 'date',
     ];
 
     public function bookings()
@@ -17,13 +19,18 @@ class Client extends Model
         return $this->hasMany(Booking::class);
     }
 
-    public function subscriptions()
+    public function tags()
     {
-        return $this->hasMany(Subscription::class);
+        return $this->belongsToMany(ClientTag::class, 'client_tag_pivot', 'client_id', 'tag_id');
     }
 
-    public function waitlists()
+    public function vouchers()
     {
-        return $this->hasMany(Waitlist::class);
+        return $this->hasMany(ClientVoucher::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ClientSubscription::class);
     }
 }

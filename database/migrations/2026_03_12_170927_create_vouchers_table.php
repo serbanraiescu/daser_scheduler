@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('type')->comment('fixed, percentage');
+            $table->string('type'); // percent, fixed
             $table->decimal('value', 10, 2);
-            $table->dateTime('starts_at')->nullable();
-            $table->dateTime('expires_at')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->integer('max_uses')->nullable();
-            $table->integer('used_count')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

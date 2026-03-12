@@ -3,21 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -26,21 +20,11 @@ class User extends Authenticatable
         'phone',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -49,25 +33,16 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the bookings assigned to this employee.
-     */
-    public function employeeBookings()
+    public function employee()
     {
-        return $this->hasMany(Booking::class, 'user_id');
+        return $this->hasOne(Employee::class);
     }
 
-    /**
-     * The services this employee can perform.
-     */
-    public function services()
+    public function bookings()
     {
-        return $this->belongsToMany(Service::class, 'employee_service', 'user_id', 'service_id');
+        return $this->hasMany(Booking::class, 'employee_id');
     }
 
-    /**
-     * Role checks.
-     */
     public function isSuperAdmin() { return $this->role === 'superadmin'; }
     public function isAdmin() { return $this->role === 'admin' || $this->role === 'superadmin'; }
     public function isEmployee() { return $this->role === 'employee'; }

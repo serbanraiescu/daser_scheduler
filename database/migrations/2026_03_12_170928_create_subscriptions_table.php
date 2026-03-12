@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->integer('services_per_month');
-            $table->decimal('monthly_price', 10, 2);
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->decimal('price', 10, 2);
+            $table->integer('duration_days');
+            $table->integer('max_uses');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

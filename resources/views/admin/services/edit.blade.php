@@ -20,9 +20,9 @@
                             </div>
 
                             <div>
-                                <x-input-label for="duration" :value="__('Duration (minutes)')" />
-                                <x-text-input id="duration" class="block mt-1 w-full" type="number" name="duration" :value="old('duration', $service->duration)" required />
-                                <x-input-error :messages="$errors->get('duration')" class="mt-2" />
+                                <x-input-label for="duration_minutes" :value="__('Duration (minutes)')" />
+                                <x-text-input id="duration_minutes" class="block mt-1 w-full" type="number" name="duration_minutes" :value="old('duration_minutes', $service->duration_minutes)" required />
+                                <x-input-error :messages="$errors->get('duration_minutes')" class="mt-2" />
                             </div>
 
                             <div>
@@ -39,8 +39,8 @@
 
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="hidden" name="is_active" value="0">
-                                    <input type="checkbox" name="is_active" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ $service->is_active ? 'checked' : '' }}>
+                                    <input type="hidden" name="active" value="0">
+                                    <input type="checkbox" name="active" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ $service->active ? 'checked' : '' }}>
                                     <span class="ml-2 text-sm text-gray-600">{{ __('Active') }}</span>
                                 </label>
                             </div>
