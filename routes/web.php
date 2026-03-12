@@ -19,6 +19,16 @@ Route::get('/migrate', function() {
     }
 });
 
+// Wipe and re-run migrations (Use only for initial setup!)
+Route::get('/migrate-fresh', function() {
+    try {
+        Artisan::call('migrate:fresh', ['--force' => true]);
+        return "Migration Fresh successful! Output: " . Artisan::output();
+    } catch (\Exception $e) {
+        return "Error during migrate:fresh: " . $e->getMessage();
+    }
+});
+
 // Clear cache if .env changes aren't reflecting
 Route::get('/clear', function() {
     Artisan::call('config:clear');
