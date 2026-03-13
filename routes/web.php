@@ -32,6 +32,18 @@ Route::get('/system-check', function() {
     ];
 });
 
+// Emergency Log Viewer
+Route::get('/view-log', function() {
+    $logPath = storage_path('logs/laravel.log');
+    if (!File::exists($logPath)) {
+        return "Log file does not exist yet.";
+    }
+    
+    $lines = 100;
+    $data = array_slice(explode("\n", File::get($logPath)), -$lines);
+    return response("<pre>" . implode("\n", $data) . "</pre>");
+});
+
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
     Route::get('/book/employee', [\App\Http\Controllers\PublicBookingController::class, 'selectEmployee'])->name('bookings.employee');
