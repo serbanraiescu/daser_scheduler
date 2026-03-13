@@ -27,6 +27,8 @@ Route::get('/system-check', function() {
     return [
         'php_version' => PHP_VERSION,
         'app_key_set' => strlen(config('app.key')) > 0,
+        'public_path' => public_path(),
+        'vite_manifest_exists' => File::exists(public_path('build/manifest.json')),
         'storage_checks' => $results,
         'log_writable' => is_writable(storage_path('logs')),
     ];
