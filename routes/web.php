@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
-// Temporary migration route for CMS deployment
+// Temporary diagnostic routes
 Route::get('/migrate-cms', function() {
     try {
         Artisan::call('migrate', ['--force' => true]);
@@ -12,6 +12,12 @@ Route::get('/migrate-cms', function() {
     } catch (\Exception $e) {
         return "Error during migration: " . $e->getMessage();
     }
+});
+
+Route::get('/view-log', function() {
+    $logPath = storage_path('logs/laravel.log');
+    if (!file_exists($logPath)) return "Log file not found.";
+    return nl2br(e(file_get_contents($logPath)));
 });
 
 Route::middleware(['check.license'])->group(function () {
