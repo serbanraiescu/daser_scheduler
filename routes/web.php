@@ -15,11 +15,18 @@ Route::get('/migrate-cms', function() {
 });
 
 Route::middleware(['check.license'])->group(function () {
-    Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
-    Route::get('/book/employee', [\App\Http\Controllers\PublicBookingController::class, 'selectEmployee'])->name('bookings.employee');
-    Route::get('/book/slots', [\App\Http\Controllers\PublicBookingController::class, 'selectSlots'])->name('bookings.slots');
-    Route::get('/book/details', [\App\Http\Controllers\PublicBookingController::class, 'details'])->name('bookings.details');
-    Route::post('/book/confirm', [\App\Http\Controllers\PublicBookingController::class, 'confirm'])->name('bookings.confirm');
+    Route::get('/', [\App\Http\Controllers\PublicWebsiteController::class, 'index'])->name('home');
+    Route::get('/page/{slug}', [\App\Http\Controllers\PublicWebsiteController::class, 'show'])->name('pages.show');
+    
+    // Booking Flow
+    Route::prefix('booking')->group(function() {
+        Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
+        Route::get('/employee', [\App\Http\Controllers\PublicBookingController::class, 'selectEmployee'])->name('bookings.employee');
+        Route::get('/slots', [\App\Http\Controllers\PublicBookingController::class, 'selectSlots'])->name('bookings.slots');
+        Route::get('/details', [\App\Http\Controllers\PublicBookingController::class, 'details'])->name('bookings.details');
+        Route::post('/confirm', [\App\Http\Controllers\PublicBookingController::class, 'confirm'])->name('bookings.confirm');
+    });
+
     Route::get('/appointment/{link}', [\App\Http\Controllers\PublicBookingController::class, 'show'])->name('bookings.show');
     Route::post('/appointment/{link}/cancel', [\App\Http\Controllers\PublicBookingController::class, 'cancel'])->name('bookings.cancel');
     Route::get('/appointment/{link}/ics', [\App\Http\Controllers\IcsController::class, 'download'])->name('bookings.ics');
@@ -53,6 +60,15 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::post('clients/import', [\App\Http\Controllers\Admin\ClientController::class, 'import'])->name('clients.import');
         Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);
         Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
+
+        // Website CMS Routes
+        Route::get('/website', [\App\Http\Controllers\Admin\WebsiteController::class, 'index'])->name('website.index');
+        Route::patch('/website/settings', [\App\Http\Controllers\Admin\WebsiteController::class, 'updateSettings'])->name('website.settings.update');
+        Route::get('/website/pages/create', [\App\Http\Controllers\Admin\WebsiteController::class, 'pageCreate'])->name('website.pages.create');
+        Route::post('/website/pages', [\App\Http\Controllers\Admin\WebsiteController::class, 'pageStore'])->name('website.pages.store');
+        Route::get('/website/pages/{page}/edit', [\App\Http\Controllers\Admin\WebsiteController::class, 'pageEdit'])->name('website.pages.edit');
+        Route::patch('/website/pages/{page}', [\App\Http\Controllers\Admin\WebsiteController::class, 'pageUpdate'])->name('website.pages.update');
+        Route::delete('/website/pages/{page}', [\App\Http\Controllers\Admin\WebsiteController::class, 'pageDestroy'])->name('website.pages.destroy');
     });
 
     // Employee Routes

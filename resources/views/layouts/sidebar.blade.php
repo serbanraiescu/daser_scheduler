@@ -56,6 +56,15 @@
                 </a>
             </li>
 
+            <!-- Website CMS -->
+            <li>
+                <a href="{{ route('admin.website.index') }}" 
+                   class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('admin.website.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                    <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('admin.website.*') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2v-7l2-2.5L2 9V3z"/><path d="M13 3v8"/><path d="M13 17v4"/><path d="M8 3v3"/><path d="M8 11v3"/><path d="M8 18v3"/><path d="M18 3v3"/><path d="M18 11v3"/><path d="M18 18v3"/><path d="m3 9 17-7"/><path d="M3 15h12"/></svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Website</span>
+                </a>
+            </li>
+
             <!-- Setari -->
             <li class="pt-4 mt-4 border-t border-gray-800">
                 <a href="{{ route('admin.settings.index') }}" 
