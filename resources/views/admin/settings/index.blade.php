@@ -109,6 +109,22 @@
                                     </button>
                                 </form>
                             </div>
+
+                            <div class="mt-12 pt-8 border-t">
+                                <h3 class="text-lg font-bold border-b pb-2 mb-6 text-red-600">Sistem & Mentenanță</h3>
+                                <div class="p-6 bg-red-50 rounded-xl border border-red-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                    <div>
+                                        <h4 class="font-bold text-red-900">Actualizare Bază de Date</h4>
+                                        <p class="text-sm text-red-700 mt-1">Dacă ai făcut update la aplicație și lipsesc tabele sau coloane, rulează acest utilitar.</p>
+                                    </div>
+                                    <form action="{{ route('admin.settings.migrate') }}" method="POST" onsubmit="return confirm('Ești sigur că vrei să actualizezi baza de date?')">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-red-600 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                            Actualizează Tabelele
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
             </div>

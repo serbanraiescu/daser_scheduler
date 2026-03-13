@@ -35,4 +35,14 @@ class SettingController extends Controller
 
         return back()->with('success', 'Settings updated successfully.');
     }
+
+    public function migrate()
+    {
+        try {
+            \Artisan::call('migrate', ['--force' => true]);
+            return back()->with('success', 'Baza de date a fost actualizată cu succes. Tabelele noi au fost create.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Eroare la migrare: ' . $e->getMessage()]);
+        }
+    }
 }

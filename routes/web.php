@@ -65,6 +65,7 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class);
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::patch('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/migrate', [\App\Http\Controllers\Admin\SettingController::class, 'migrate'])->name('settings.migrate');
         Route::post('clients/import', [\App\Http\Controllers\Admin\ClientController::class, 'import'])->name('clients.import');
         Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);
         Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
