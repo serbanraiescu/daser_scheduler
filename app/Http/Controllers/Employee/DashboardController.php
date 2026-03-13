@@ -44,7 +44,7 @@ class DashboardController extends Controller
 
         $service = \App\Models\Service::findOrFail($validated['service_id']);
         $startTime = \Carbon\Carbon::parse($validated['date'] . ' ' . $validated['time']);
-        $endTime = $startTime->copy()->addMinutes($service->duration_minutes);
+        $endTime = $startTime->copy()->addMinutes((int) $service->duration_minutes);
 
         if (\App\Models\Booking::isOverlapping(auth()->id(), $startTime, $endTime)) {
             return back()->withErrors(['time' => 'Intervalul este deja ocupat.'])->withInput();

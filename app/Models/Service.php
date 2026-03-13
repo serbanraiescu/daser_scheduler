@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     protected $fillable = ['name', 'duration_minutes', 'price', 'description', 'active', 'category_id'];
+    
+    protected $casts = [
+        'duration_minutes' => 'integer',
+        'price' => 'decimal:2',
+        'active' => 'boolean',
+    ];
 
     public function category()
     {
