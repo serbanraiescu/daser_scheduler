@@ -8,7 +8,7 @@ class EmployeeSchedule extends Model
 {
     protected $table = 'employee_schedule';
     
-    protected $fillable = ['employee_id', 'date', 'start_time', 'end_time', 'break_start', 'break_end'];
+    protected $fillable = ['employee_id', 'date', 'start_time', 'end_time', 'break_start', 'break_end', 'is_off'];
 
     protected $casts = [
         'date' => 'date',

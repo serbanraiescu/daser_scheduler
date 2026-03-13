@@ -23,6 +23,11 @@ class Employee extends Model
         return $this->hasMany(EmployeeSchedule::class);
     }
 
+    public function standardSchedules()
+    {
+        return $this->hasMany(StandardSchedule::class);
+    }
+
     public function blockedSlots()
     {
         return $this->hasMany(BlockedSlot::class);

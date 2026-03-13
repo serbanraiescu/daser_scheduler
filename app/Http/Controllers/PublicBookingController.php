@@ -11,6 +11,7 @@ use App\Models\Voucher;
 use App\Models\Client;
 use App\Models\EmployeeSchedule;
 use App\Models\BlockedSlot;
+use App\Models\StandardSchedule;
 use Illuminate\Support\Str;
 
 class PublicBookingController extends Controller
@@ -111,14 +112,49 @@ class PublicBookingController extends Controller
 
         if (!$employeeModel || !$employeeModel->active) return [];
 
+        // 1. Check if the WHOLE DAY is blocked (Vacation)
+        $isDayBlocked = BlockedSlot::where('employee_id', $employeeModel->id)
+            ->whereDate('date', $date)
+            ->where('start_time', '<=', '00:00:00')
+            ->where('end_time', '>=', '23:59:59')
+            ->exists();
+
+        if ($isDayBlocked) return [];
+
+        // 2. Determine Active Schedule (Exception or Standard)
         $schedule = EmployeeSchedule::where('employee_id', $employeeModel->id)
             ->whereDate('date', $date)
             ->first();
 
-        if (!$schedule) return [];
+        if (!$schedule || $schedule->is_off) {
+            // Fallback to Standard Schedule
+            $dayOfWeek = Carbon::parse($date)->dayOfWeek;
+            $standard = StandardSchedule::where('employee_id', $employeeModel->id)
+                ->where('day_of_week', $dayOfWeek)
+                ->first();
 
-        $dayStart = Carbon::parse($date . ' ' . $schedule->start_time);
-        $dayEnd = Carbon::parse($date . ' ' . $schedule->end_time);
+            if (!$standard || $standard->is_off) {
+                // If we had an exception which wasn't "off" but didn't exist (unlikely), 
+                // or if standard says off, then no slots.
+                // Note: If $schedule existed but was is_off, we abort here.
+                return [];
+            }
+            
+            // Use standard hours
+            $dayStartStr = $standard->start_time;
+            $dayEndStr = $standard->end_time;
+            $breakStartStr = $standard->break_start;
+            $breakEndStr = $standard->break_end;
+        } else {
+            // Use exception hours
+            $dayStartStr = $schedule->start_time;
+            $dayEndStr = $schedule->end_time;
+            $breakStartStr = $schedule->break_start;
+            $breakEndStr = $schedule->break_end;
+        }
+
+        $dayStart = Carbon::parse($date . ' ' . $dayStartStr);
+        $dayEnd = Carbon::parse($date . ' ' . $dayEndStr);
         
         $existingBookings = Booking::where('employee_id', $employee->id)
             ->whereDate('date', $date)
@@ -141,10 +177,10 @@ class PublicBookingController extends Controller
             
             $isAvailable = true;
 
-            // 1. Check Break
-            if ($schedule->break_start && $schedule->break_end) {
-                $breakStart = Carbon::parse($date . ' ' . $schedule->break_start);
-                $breakEnd = Carbon::parse($date . ' ' . $schedule->break_end);
+            // Check Break
+            if ($breakStartStr && $breakEndStr) {
+                $breakStart = Carbon::parse($date . ' ' . $breakStartStr);
+                $breakEnd = Carbon::parse($date . ' ' . $breakEndStr);
                 if ($slotStart->lt($breakEnd) && $slotEnd->gt($breakStart)) {
                     $isAvailable = false;
                 }

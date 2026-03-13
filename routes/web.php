@@ -86,8 +86,17 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
     // Employee Routes
     Route::middleware(['role:employee'])->prefix('employee')->name('employee.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Employee\DashboardController::class, 'index'])->name('dashboard');
+        
+        // Manual Bookings
+        Route::get('/bookings/create', [\App\Http\Controllers\Employee\DashboardController::class, 'create'])->name('bookings.create');
+        Route::post('/bookings', [\App\Http\Controllers\Employee\DashboardController::class, 'store'])->name('bookings.store');
+        
+        // Schedule
         Route::get('/schedule', [\App\Http\Controllers\Employee\ScheduleController::class, 'index'])->name('schedule.index');
         Route::post('/schedule', [\App\Http\Controllers\Employee\ScheduleController::class, 'update'])->name('schedule.update');
+        Route::post('/schedule/standard', [\App\Http\Controllers\Employee\ScheduleController::class, 'updateStandard'])->name('schedule.standard.update');
+        Route::post('/schedule/block', [\App\Http\Controllers\Employee\ScheduleController::class, 'block'])->name('schedule.block');
+        Route::delete('/schedule/unblock/{id}', [\App\Http\Controllers\Employee\ScheduleController::class, 'unblock'])->name('schedule.unblock');
     });
 });
 
