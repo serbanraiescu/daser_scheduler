@@ -56,7 +56,11 @@ class WebsiteController extends Controller
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/website'), $filename);
+            $path = public_path('uploads/website');
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
+            $file->move($path, $filename);
             $settings->logo_url = asset('uploads/website/' . $filename);
         }
 
