@@ -45,6 +45,8 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         return redirect()->route('admin.dashboard');
     })->name('dashboard');
 
+    Route::post('/admin/stop-impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'stop'])->name('admin.employees.stop-impersonate');
+
     // Admin Routes
     Route::middleware(['role:admin,superadmin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
@@ -64,7 +66,6 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::resource('service-categories', \App\Http\Controllers\Admin\ServiceCategoryController::class);
         Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class);
         Route::post('/employees/{user}/impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'start'])->name('employees.impersonate');
-        Route::post('/employees/stop-impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'stop'])->name('employees.stop-impersonate');
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::patch('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
         Route::post('/settings/migrate', [\App\Http\Controllers\Admin\SettingController::class, 'migrate'])->name('settings.migrate');
