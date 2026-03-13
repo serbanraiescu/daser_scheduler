@@ -46,30 +46,33 @@
                     </form>
                 </div>
 
-                <div class="divide-y">
+                <div class="divide-y divide-gray-100">
                     @forelse($bookings as $booking)
-                        <div class="p-6 hover:bg-gray-50 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="p-5 sm:p-6 hover:bg-gray-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div class="flex items-center gap-4">
-                                <div class="w-20 text-center">
-                                    <div class="text-lg font-black text-indigo-600">{{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}</div>
-                                    <div class="text-xs font-bold text-gray-400 uppercase">Start</div>
+                                <!-- Time info -->
+                                <div class="w-16 sm:w-20 text-center shrink-0">
+                                    <div class="text-base sm:text-lg font-black text-indigo-600 leading-tight">{{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}</div>
+                                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Start</div>
                                 </div>
-                                <div class="h-10 w-px bg-gray-200 hidden md:block"></div>
-                                <div>
-                                    <div class="text-lg font-bold text-gray-900">{{ $booking->client->name }}</div>
-                                    <div class="text-sm text-gray-500 flex items-center gap-2">
-                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                <div class="h-10 w-px bg-gray-100 hidden sm:block"></div>
+                                
+                                <!-- Client info -->
+                                <div class="min-w-0">
+                                    <div class="text-base sm:text-lg font-bold text-gray-900 truncate">{{ $booking->client->name }}</div>
+                                    <div class="text-xs sm:text-sm text-gray-500 flex items-center gap-1.5 font-medium mt-0.5">
+                                        <svg class="w-3.5 h-3.5 opacity-60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                                         {{ $booking->client->phone }}
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="flex flex-col md:items-end">
-                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 uppercase mb-1">
+                            <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-50">
+                                <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-600 uppercase">
                                     {{ $booking->service->name }}
                                 </span>
-                                <div class="text-xs text-gray-400 font-bold">
-                                    Durată: {{ $booking->service->duration_minutes }} min
+                                <div class="text-[10px] text-gray-400 font-bold uppercase mt-1">
+                                    {{ $booking->service->duration_minutes }} min
                                 </div>
                             </div>
                         </div>

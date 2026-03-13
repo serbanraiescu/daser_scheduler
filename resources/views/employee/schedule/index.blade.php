@@ -38,40 +38,41 @@
                             <div class="space-y-4">
                                 @foreach($weekDays as $num => $name)
                                     @php $s = $standardSchedules->get($num); @endphp
-                                    <div class="p-4 rounded-xl border bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                        <div class="w-24 font-bold text-gray-900">{{ $name }}</div>
-                                        
-                                        <div class="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                            <div>
-                                                <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Inceput</label>
-                                                <input type="time" name="standard[{{ $num }}][start_time]" 
-                                                    value="{{ $s ? \Carbon\Carbon::parse($s->start_time)->format('H:i') : '09:00' }}"
-                                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Sfârșit</label>
-                                                <input type="time" name="standard[{{ $num }}][end_time]" 
-                                                    value="{{ $s ? \Carbon\Carbon::parse($s->end_time)->format('H:i') : '18:00' }}"
-                                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Pauză (de la)</label>
-                                                <input type="time" name="standard[{{ $num }}][break_start]" 
-                                                    value="{{ ($s && $s->break_start) ? \Carbon\Carbon::parse($s->break_start)->format('H:i') : '' }}"
-                                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Pauză (până la)</label>
-                                                <input type="time" name="standard[{{ $num }}][break_end]" 
-                                                    value="{{ ($s && $s->break_end) ? \Carbon\Carbon::parse($s->break_end)->format('H:i') : '' }}"
-                                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
+                                    <div class="p-4 sm:p-5 rounded-2xl border bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+                                        <div class="md:w-32 shrink-0">
+                                            <div class="text-sm font-black text-gray-900 uppercase tracking-wide">{{ $name }}</div>
+                                            <div class="mt-1 flex items-center gap-2">
+                                                <input type="checkbox" id="off_{{ $num }}" name="standard[{{ $num }}][is_off]" {{ ($s && $s->is_off) ? 'checked' : '' }}
+                                                    class="rounded-lg border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 w-5 h-5">
+                                                <label for="off_{{ $num }}" class="text-xs font-bold text-gray-500 uppercase">Liber</label>
                                             </div>
                                         </div>
-
-                                        <div class="flex items-center gap-2">
-                                            <input type="checkbox" name="standard[{{ $num }}][is_off]" {{ ($s && $s->is_off) ? 'checked' : '' }}
-                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                            <label class="text-sm font-medium text-gray-700">Liber</label>
+                                        
+                                        <div class="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Inceput</label>
+                                                <input type="time" name="standard[{{ $num }}][start_time]" 
+                                                    value="{{ $s ? \Carbon\Carbon::parse($s->start_time)->format('H:i') : '09:00' }}"
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
+                                            </div>
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Sfârșit</label>
+                                                <input type="time" name="standard[{{ $num }}][end_time]" 
+                                                    value="{{ $s ? \Carbon\Carbon::parse($s->end_time)->format('H:i') : '18:00' }}"
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
+                                            </div>
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Pauză (de la)</label>
+                                                <input type="time" name="standard[{{ $num }}][break_start]" 
+                                                    value="{{ ($s && $s->break_start) ? \Carbon\Carbon::parse($s->break_start)->format('H:i') : '' }}"
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
+                                            </div>
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Pauză (până la)</label>
+                                                <input type="time" name="standard[{{ $num }}][break_end]" 
+                                                    value="{{ ($s && $s->break_end) ? \Carbon\Carbon::parse($s->break_end)->format('H:i') : '' }}"
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -97,45 +98,42 @@
                             <div class="space-y-4">
                                 @foreach($days as $date => $exception)
                                     @php $cd = \Carbon\Carbon::parse($date); @endphp
-                                    <div class="p-4 rounded-xl border {{ $cd->isToday() ? 'border-indigo-200 bg-indigo-50' : 'bg-gray-50 border-gray-200' }} flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                        <div class="w-48">
-                                            <div class="font-bold text-gray-900 capitalize">{{ $cd->translatedFormat('l') }}</div>
-                                            <div class="text-sm text-gray-500">{{ $cd->format('d M Y') }}</div>
+                                    <div class="p-4 sm:p-5 rounded-2xl border {{ $cd->isToday() ? 'border-indigo-200 bg-indigo-50/50' : 'bg-gray-50 border-gray-200' }} flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+                                        <div class="md:w-40 shrink-0">
+                                            <div class="text-sm font-black text-gray-900 capitalize tracking-wide leading-tight">{{ $cd->translatedFormat('l') }}</div>
+                                            <div class="text-[10px] font-bold text-gray-400 mt-0.5">{{ $cd->format('d M Y') }}</div>
+                                            <div class="mt-2 flex items-center gap-2">
+                                                <input type="checkbox" id="ex_off_{{ $date }}" name="schedule[{{ $date }}][is_off]" value="1" {{ ($exception && $exception->is_off) ? 'checked' : '' }}
+                                                    class="rounded-lg border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 w-5 h-5">
+                                                <label for="ex_off_{{ $date }}" class="text-xs font-bold text-gray-500 uppercase">Liber</label>
+                                            </div>
                                         </div>
 
-                                        <div class="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                            <div>
-                                                <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Start</label>
+                                        <div class="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Start</label>
                                                 <input type="time" name="schedule[{{ $date }}][start_time]" 
                                                     value="{{ $exception ? \Carbon\Carbon::parse($exception->start_time)->format('H:i') : '' }}"
-                                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
                                             </div>
-                                            <div>
-                                                <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Sfârșit</label>
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Sfârșit</label>
                                                 <input type="time" name="schedule[{{ $date }}][end_time]" 
                                                     value="{{ $exception ? \Carbon\Carbon::parse($exception->end_time)->format('H:i') : '' }}"
-                                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
                                             </div>
-                                            <div class="col-span-2 grid grid-cols-2 gap-2">
-                                                <div>
-                                                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Pauză (de la)</label>
-                                                    <input type="time" name="schedule[{{ $date }}][break_start]" 
-                                                        value="{{ ($exception && $exception->break_start) ? \Carbon\Carbon::parse($exception->break_start)->format('H:i') : '' }}"
-                                                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Pauză (până la)</label>
-                                                    <input type="time" name="schedule[{{ $date }}][break_end]" 
-                                                        value="{{ ($exception && $exception->break_end) ? \Carbon\Carbon::parse($exception->break_end)->format('H:i') : '' }}"
-                                                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 sm:text-sm">
-                                                </div>
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Pauză (de la)</label>
+                                                <input type="time" name="schedule[{{ $date }}][break_start]" 
+                                                    value="{{ ($exception && $exception->break_start) ? \Carbon\Carbon::parse($exception->break_start)->format('H:i') : '' }}"
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
                                             </div>
-                                        </div>
-
-                                        <div class="flex items-center gap-2">
-                                            <input type="checkbox" name="schedule[{{ $date }}][is_off]" value="1" {{ ($exception && $exception->is_off) ? 'checked' : '' }}
-                                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                            <label class="text-sm font-medium text-gray-700">Liber</label>
+                                            <div class="space-y-1">
+                                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Pauză (până la)</label>
+                                                <input type="time" name="schedule[{{ $date }}][break_end]" 
+                                                    value="{{ ($exception && $exception->break_end) ? \Carbon\Carbon::parse($exception->break_end)->format('H:i') : '' }}"
+                                                    class="block w-full rounded-xl border-gray-200 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm font-bold">
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
