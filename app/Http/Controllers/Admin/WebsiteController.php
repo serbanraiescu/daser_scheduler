@@ -54,13 +54,17 @@ class WebsiteController extends Controller
 
         // Handle Images
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('website', 'public');
-            $settings->logo_url = Storage::url($path);
+            $file = $request->file('logo');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/website'), $filename);
+            $settings->logo_url = asset('uploads/website/' . $filename);
         }
 
         if ($request->hasFile('hero')) {
-            $path = $request->file('hero')->store('website', 'public');
-            $settings->hero_image = Storage::url($path);
+            $file = $request->file('hero');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/website'), $filename);
+            $settings->hero_image = asset('uploads/website/' . $filename);
         }
 
         $settings->fill($request->except(['logo', 'hero', 'show_services_section', 'show_about_section', 'show_contact_section']));
