@@ -50,6 +50,16 @@ Route::get('/view-log', function() {
     return response("<pre>" . implode("\n", $data) . "</pre>");
 });
 
+// Seed data after fresh migration
+Route::get('/seed', function() {
+    try {
+        Artisan::call('db:seed', ['--force' => true]);
+        return "Database Seed successful! Output: " . Artisan::output();
+    } catch (\Exception $e) {
+        return "Error during seeding: " . $e->getMessage();
+    }
+});
+
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
     Route::get('/book/employee', [\App\Http\Controllers\PublicBookingController::class, 'selectEmployee'])->name('bookings.employee');
