@@ -16,34 +16,34 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create SuperAdmin
-        \App\Models\User::factory()->create([
+        \App\Models\User::create([
             'name' => 'Super Admin',
             'email' => 'admin@admin.com',
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'superadmin',
         ]);
 
         // Create a sample Admin
-        \App\Models\User::factory()->create([
+        \App\Models\User::create([
             'name' => 'Salon Owner',
             'email' => 'owner@salon.com',
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'admin',
         ]);
 
         // Create sample Employee
-        \App\Models\User::factory()->create([
+        \App\Models\User::create([
             'name' => 'John Barber',
             'email' => 'john@salon.com',
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'employee',
         ]);
 
         // Create sample Client
-        \App\Models\User::factory()->create([
+        \App\Models\User::create([
             'name' => 'Regular Client',
             'email' => 'client@client.com',
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'client',
         ]);
     }
