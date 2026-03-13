@@ -1,5 +1,17 @@
+<?php
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/seed-demo', function() {
+    try {
+        Artisan::call('db:seed', ['--class' => 'BarbershopDemoSeeder', '--force' => true]);
+        return "Demo seeded successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
 
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicWebsiteController::class, 'index'])->name('home');
