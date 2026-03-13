@@ -67,13 +67,20 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-50">
-                                <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-600 uppercase">
-                                    {{ $booking->service->name }}
-                                </span>
-                                <div class="text-[10px] text-gray-400 font-bold uppercase mt-1">
-                                    {{ $booking->service->duration_minutes }} min
+                            <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-50 flex-wrap gap-2">
+                                <div class="flex flex-col items-start sm:items-end">
+                                    <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-600 uppercase">
+                                        {{ $booking->service->name }}
+                                    </span>
+                                    <div class="text-[10px] text-gray-400 font-bold uppercase mt-1">
+                                        {{ $booking->service->duration_minutes }} min
+                                    </div>
                                 </div>
+                                
+                                <a href="tel:{{ $booking->client->phone }}" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:bg-emerald-600 transition shadow-lg shadow-emerald-200">
+                                    <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    Sună
+                                </a>
                             </div>
                         </div>
                     @empty
