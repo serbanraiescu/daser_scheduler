@@ -29,6 +29,10 @@ Route::get('/system-check', function() {
         'app_key_set' => strlen(config('app.key')) > 0,
         'public_path' => public_path(),
         'vite_manifest_exists' => File::exists(public_path('build/manifest.json')),
+        'absolute_manifest_check' => [
+            'path' => base_path('../public_html/build/manifest.json'),
+            'exists' => File::exists(base_path('../public_html/build/manifest.json')),
+        ],
         'storage_checks' => $results,
         'log_writable' => is_writable(storage_path('logs')),
     ];
