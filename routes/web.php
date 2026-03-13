@@ -42,7 +42,10 @@ Route::middleware(['check.license'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
     Route::get('/dashboard', function () {
-        return redirect()->route('admin.dashboard');
+        if (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('employee.dashboard');
     })->name('dashboard');
 
     Route::post('/admin/stop-impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'stop'])->name('admin.employees.stop-impersonate');
