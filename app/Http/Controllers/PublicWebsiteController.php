@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\WebsiteSetting;
 use App\Models\Page;
 use App\Models\Service;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class PublicWebsiteController extends Controller
@@ -12,11 +13,12 @@ class PublicWebsiteController extends Controller
     public function index()
     {
         $settings = WebsiteSetting::first() ?? new WebsiteSetting();
-        $services = Service::all();
+        $services = Service::where('active', true)->get();
+        $employees = Employee::with('user')->where('active', true)->get();
         $pagesHeader = Page::where('status', 'published')->where('show_in_header', true)->get();
         $pagesFooter = Page::where('status', 'published')->where('show_in_footer', true)->get();
         
-        return view('public.landing', compact('settings', 'services', 'pagesHeader', 'pagesFooter'));
+        return view('public.landing', compact('settings', 'services', 'employees', 'pagesHeader', 'pagesFooter'));
     }
 
     public function show($slug)
