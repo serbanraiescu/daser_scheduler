@@ -1,49 +1,5 @@
-<?php
-
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
-
-// Temporary diagnostic routes
-Route::get('/migrate-cms', function() {
-    try {
-        Artisan::call('migrate', ['--force' => true]);
-        return "Migration successful! Output: " . Artisan::output();
-    } catch (\Exception $e) {
-        return "Error during migration: " . $e->getMessage();
-    }
-});
-
-Route::get('/view-log', function() {
-    $logPath = storage_path('logs/laravel.log');
-    if (!file_exists($logPath)) return "Log file not found.";
-    return nl2br(e(file_get_contents($logPath)));
-});
-
-Route::get('/clear-cache', function() {
-    try {
-        Artisan::call('view:clear');
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
-        return "Cache cleared successfully!";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});
-
-Route::get('/check-file', function() {
-    $viewPath = resource_path('views');
-    $publicPath = resource_path('views/public');
-    return [
-        'base_views_path' => $viewPath,
-        'base_views_exists' => is_dir($viewPath),
-        'base_views_files' => is_dir($viewPath) ? scandir($viewPath) : 'not found',
-        'public_dir_exists' => is_dir($publicPath),
-        'public_dir_files' => is_dir($publicPath) ? scandir($publicPath) : 'not found',
-        'landing_file' => $publicPath . '/landing.blade.php',
-        'landing_exists' => file_exists($publicPath . '/landing.blade.php'),
-    ];
-});
 
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicWebsiteController::class, 'index'])->name('home');
