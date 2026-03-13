@@ -11,6 +11,18 @@ class BarbershopDemoSeeder extends Seeder
 {
     public function run(): void
     {
+        // 0. Service Categories
+        $categories = [
+            ['name' => 'Haircuts', 'icon' => 'scissors'],
+            ['name' => 'Beard', 'icon' => 'user'],
+            ['name' => 'Packages', 'icon' => 'box'],
+        ];
+
+        $categoryModels = [];
+        foreach ($categories as $cat) {
+            $categoryModels[$cat['name']] = \App\Models\ServiceCategory::updateOrCreate(['name' => $cat['name']], $cat);
+        }
+
         // 1. Barbershop Services
         $services = [
             [
@@ -18,30 +30,35 @@ class BarbershopDemoSeeder extends Seeder
                 'description' => 'Tuns realizat din foarfece și mașină, finisat cu atenție la detalii.',
                 'duration_minutes' => 45,
                 'price' => 60.00,
+                'category_id' => $categoryModels['Haircuts']->id,
             ],
             [
                 'name' => 'Tuns Modern / Skinfade',
                 'description' => 'Tuns modern cu degrade de la zero, stilizare și consiliere.',
                 'duration_minutes' => 60,
                 'price' => 80.00,
+                'category_id' => $categoryModels['Haircuts']->id,
             ],
             [
                 'name' => 'Aranjat Barbă',
                 'description' => 'Contur, scurtat și hidratare cu uleiuri profesionale.',
                 'duration_minutes' => 30,
                 'price' => 40.00,
+                'category_id' => $categoryModels['Beard']->id,
             ],
             [
                 'name' => 'Pachet Royal (Tuns + Barbă)',
                 'description' => 'Experiența completă: tuns, aranjat barbă și masaj capilar.',
                 'duration_minutes' => 90,
                 'price' => 110.00,
+                'category_id' => $categoryModels['Packages']->id,
             ],
             [
                 'name' => 'Bărbierit Tradițional (Hot Towel)',
                 'description' => 'Bărbierit cu briciul, prosoape calde și masaj facial.',
                 'duration_minutes' => 45,
                 'price' => 70.00,
+                'category_id' => $categoryModels['Beard']->id,
             ],
         ];
 

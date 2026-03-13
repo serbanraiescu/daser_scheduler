@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
-    protected $fillable = ['name', 'duration_minutes', 'price', 'description', 'active'];
+    protected $fillable = ['name', 'duration_minutes', 'price', 'description', 'active', 'category_id'];
+
+    public function category()
+    {
+        return $this->belongsTo(ServiceCategory::class, 'category_id');
+    }
 
     public function bookings()
     {

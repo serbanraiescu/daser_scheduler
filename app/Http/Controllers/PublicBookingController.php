@@ -17,8 +17,51 @@ class PublicBookingController extends Controller
 {
     public function index()
     {
-        $services = Service::where('active', true)->get();
-        return view('bookings.index', compact('services'));
+        $settings = \App\Models\WebsiteSetting::first();
+        return view('bookings.index', compact('settings'));
+    }
+
+    public function apiCategories()
+    {
+        $categories = \App\Models\ServiceCategory::where('active', true)->get();
+        return response()->json($categories);
+    }
+
+    public function apiServices(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+        $services = Service::where('active', true)
+            ->when($categoryId, function($query) use ($categoryId) {
+                return $query->where('category_id', $categoryId);
+            })
+            ->get();
+        return response()->json($services);
+    }
+
+    public function apiSlots(Request $request)
+    {
+        $serviceId = $request->input('service_id');
+        $date = $request->input('date', now()->format('Y-m-d'));
+        
+        $service = Service::findOrFail($serviceId);
+        $employees = $service->employees()->where('active', true)->with('user')->get()->pluck('user');
+
+        $availableSlots = [];
+        foreach ($employees as $employee) {
+            $slots = $this->generateSlots($employee, $service, $date);
+            if (!empty($slots)) {
+                $availableSlots[] = [
+                    'employee_id' => $employee->id,
+                    'employee_name' => $employee->name,
+                    'slots' => $slots
+                ];
+            }
+        }
+
+        return response()->json([
+            'date' => $date,
+            'available_slots' => $availableSlots
+        ]);
     }
 
     public function selectEmployee(Request $request)
@@ -160,16 +203,28 @@ class PublicBookingController extends Controller
 
     public function confirm(Request $request)
     {
-        $validated = $request->validate([
-            'service_id' => 'required|exists:services,id',
-            'employee_id' => 'required|exists:users,id',
-            'date' => 'required|date',
-            'time' => 'required',
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'nullable|email',
-            'voucher_code' => 'nullable|string',
-        ]);
+        if ($request->wantsJson()) {
+            $validated = $request->validate([
+                'service_id' => 'required|exists:services,id',
+                'employee_id' => 'required|exists:users,id',
+                'date' => 'required|date',
+                'time' => 'required',
+                'name' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'email' => 'nullable|email',
+            ]);
+        } else {
+            $validated = $request->validate([
+                'service_id' => 'required|exists:services,id',
+                'employee_id' => 'required|exists:users,id',
+                'date' => 'required|date',
+                'time' => 'required',
+                'name' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'email' => 'nullable|email',
+                'voucher_code' => 'nullable|string',
+            ]);
+        }
 
         $service = Service::findOrFail($validated['service_id']);
         $employee = User::findOrFail($validated['employee_id']);
@@ -235,6 +290,10 @@ class PublicBookingController extends Controller
 
         if ($client->email) {
             $client->notify(new \App\Notifications\BookingConfirmed($booking));
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json(['redirect' => route('bookings.show', $booking->manage_token)]);
         }
 
         return redirect()->route('bookings.show', $booking->manage_token)->with('success', 'Booking confirmed!');

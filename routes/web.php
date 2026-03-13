@@ -26,6 +26,9 @@ Route::middleware(['check.license'])->group(function () {
     // Booking Flow
     Route::prefix('booking')->group(function() {
         Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
+        Route::get('/api/categories', [\App\Http\Controllers\PublicBookingController::class, 'apiCategories']);
+        Route::get('/api/services', [\App\Http\Controllers\PublicBookingController::class, 'apiServices']);
+        Route::get('/api/slots', [\App\Http\Controllers\PublicBookingController::class, 'apiSlots']);
         Route::get('/employee', [\App\Http\Controllers\PublicBookingController::class, 'selectEmployee'])->name('bookings.employee');
         Route::get('/slots', [\App\Http\Controllers\PublicBookingController::class, 'selectSlots'])->name('bookings.slots');
         Route::get('/details', [\App\Http\Controllers\PublicBookingController::class, 'details'])->name('bookings.details');
