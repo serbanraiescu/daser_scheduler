@@ -4,6 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
+Route::get('/view-log', function() {
+    $logPath = storage_path('logs/laravel.log');
+    if (!file_exists($logPath)) return "Log file not found.";
+    return nl2br(e(file_get_contents($logPath)));
+});
+
 Route::get('/seed-demo', function() {
     try {
         Artisan::call('db:seed', ['--class' => 'BarbershopDemoSeeder', '--force' => true]);
