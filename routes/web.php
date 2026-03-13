@@ -20,6 +20,27 @@ Route::get('/view-log', function() {
     return nl2br(e(file_get_contents($logPath)));
 });
 
+Route::get('/clear-cache', function() {
+    try {
+        Artisan::call('view:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        return "Cache cleared successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
+Route::get('/check-file', function() {
+    $path = resource_path('views/public/landing.blade.php');
+    return [
+        'path' => $path,
+        'exists' => file_exists($path),
+        'dir_exists' => is_dir(resource_path('views/public')),
+        'files' => is_dir(resource_path('views/public')) ? scandir(resource_path('views/public')) : 'dir not found'
+    ];
+});
+
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicWebsiteController::class, 'index'])->name('home');
     Route::get('/page/{slug}', [\App\Http\Controllers\PublicWebsiteController::class, 'show'])->name('pages.show');
