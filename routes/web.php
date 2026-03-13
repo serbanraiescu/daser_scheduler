@@ -2,63 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
-
-Route::get('/system-check', function() {
-    $paths = [
-        storage_path('framework/sessions'),
-        storage_path('framework/views'),
-        storage_path('framework/cache'),
-        storage_path('logs'),
-        base_path('bootstrap/cache'),
-    ];
-
-    $results = [];
-    foreach ($paths as $path) {
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0755, true);
-            $results[$path] = "Created";
-        } else {
-            $results[$path] = "Exists (" . substr(sprintf('%o', fileperms($path)), -4) . ")";
-        }
-    }
-
-    return [
-        'php_version' => PHP_VERSION,
-        'app_key_set' => strlen(config('app.key')) > 0,
-        'public_path' => public_path(),
-        'vite_manifest_exists' => File::exists(public_path('build/manifest.json')),
-        'absolute_manifest_check' => [
-            'path' => base_path('../public_html/build/manifest.json'),
-            'exists' => File::exists(base_path('../public_html/build/manifest.json')),
-        ],
-        'storage_checks' => $results,
-        'log_writable' => is_writable(storage_path('logs')),
-    ];
-});
-
-// Emergency Log Viewer
-Route::get('/view-log', function() {
-    $logPath = storage_path('logs/laravel.log');
-    if (!File::exists($logPath)) {
-        return "Log file does not exist yet.";
-    }
-    
-    $lines = 100;
-    $data = array_slice(explode("\n", File::get($logPath)), -$lines);
-    return response("<pre>" . implode("\n", $data) . "</pre>");
-});
-
-// Seed data after fresh migration
-Route::get('/seed', function() {
-    try {
-        Artisan::call('db:seed', ['--force' => true]);
-        return "Database Seed successful! Output: " . Artisan::output();
-    } catch (\Exception $e) {
-        return "Error during seeding: " . $e->getMessage();
-    }
-});
 
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
