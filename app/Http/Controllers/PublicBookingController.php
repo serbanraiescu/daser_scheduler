@@ -342,7 +342,8 @@ class PublicBookingController extends Controller
     public function show($token)
     {
         $booking = Booking::where('manage_token', $token)->with(['client', 'service', 'employee'])->firstOrFail();
-        return view('bookings.show', compact('booking'));
+        $settings = \App\Models\WebsiteSetting::first() ?? new \App\Models\WebsiteSetting();
+        return view('bookings.show', compact('booking', 'settings'));
     }
 
     public function cancel($token)
