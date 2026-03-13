@@ -4,7 +4,6 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Sidebar Toggle (Mobile & Desktop) -->
-                @if(auth()->user()->isAdmin())
                 <div class="flex items-center sm:hidden">
                     <button @click="sidebarOpen = !sidebarOpen" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none transition">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -12,7 +11,6 @@
                         </svg>
                     </button>
                 </div>
-                @endif
 
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center {{ auth()->user()->isAdmin() ? 'hidden sm:flex' : '' }}">
@@ -83,6 +81,38 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if(auth()->user()->isAdmin())
+                <!-- Admin specific links in responsive menu -->
+                <x-responsive-nav-link :href="route('admin.services.index')" :active="request()->routeIs('admin.services.*')">
+                    {{ __('Servicii') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.service-categories.index')" :active="request()->routeIs('admin.service-categories.*')">
+                    {{ __('Categorii') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.employees.index')" :active="request()->routeIs('admin.employees.*')">
+                    {{ __('Angajați') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">
+                    {{ __('Clienți') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
+                    {{ __('Vouchere') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.website.index')" :active="request()->routeIs('admin.website.*')">
+                    {{ __('Website') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
+                    {{ __('Setări') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if(auth()->user()->isEmployee())
+                <!-- Employee specific links in responsive menu -->
+                <x-responsive-nav-link :href="route('employee.schedule.index')" :active="request()->routeIs('employee.schedule.*')">
+                    {{ __('Programul Meu') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
