@@ -50,7 +50,7 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
-            **/public/**
+            /public/**
             **/tests/**
             **/storage/logs/**
             .env

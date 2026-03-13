@@ -32,12 +32,16 @@ Route::get('/clear-cache', function() {
 });
 
 Route::get('/check-file', function() {
-    $path = resource_path('views/public/landing.blade.php');
+    $viewPath = resource_path('views');
+    $publicPath = resource_path('views/public');
     return [
-        'path' => $path,
-        'exists' => file_exists($path),
-        'dir_exists' => is_dir(resource_path('views/public')),
-        'files' => is_dir(resource_path('views/public')) ? scandir(resource_path('views/public')) : 'dir not found'
+        'base_views_path' => $viewPath,
+        'base_views_exists' => is_dir($viewPath),
+        'base_views_files' => is_dir($viewPath) ? scandir($viewPath) : 'not found',
+        'public_dir_exists' => is_dir($publicPath),
+        'public_dir_files' => is_dir($publicPath) ? scandir($publicPath) : 'not found',
+        'landing_file' => $publicPath . '/landing.blade.php',
+        'landing_exists' => file_exists($publicPath . '/landing.blade.php'),
     ];
 });
 
