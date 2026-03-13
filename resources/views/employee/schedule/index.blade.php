@@ -158,10 +158,17 @@
                             @csrf
                             <h3 class="text-lg font-bold mb-4">Blochează o zi / Concediu</h3>
                             <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
-                                    <input type="date" name="date" required min="{{ date('Y-m-d') }}"
-                                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Data Început</label>
+                                        <input type="date" name="date" required min="{{ date('Y-m-d') }}"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Data Sfârșit (Optional)</label>
+                                        <input type="date" name="end_date" min="{{ date('Y-m-d') }}"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500">
+                                    </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Motiv (Ex: Concediu, Medical)</label>

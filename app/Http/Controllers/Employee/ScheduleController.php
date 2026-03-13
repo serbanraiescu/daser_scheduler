@@ -105,20 +105,31 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:date',
             'reason' => 'nullable|string|max:255',
         ]);
 
         $employee = auth()->user()->employee;
+        $start = Carbon::parse($validated['date']);
+        $end = $validated['end_date'] ? Carbon::parse($validated['end_date']) : $start;
         
-        \App\Models\BlockedSlot::create([
-            'employee_id' => $employee->id,
-            'date' => $validated['date'],
-            'start_time' => '00:00:00',
-            'end_time' => '23:59:59',
-            'reason' => $validated['reason'] ?? 'Concediu/Inactiv',
-        ]);
+        $current = $start->copy();
+        while ($current->lte($end)) {
+            \App\Models\BlockedSlot::updateOrCreate(
+                [
+                    'employee_id' => $employee->id,
+                    'date' => $current->toDateString(),
+                ],
+                [
+                    'start_time' => '00:00:00',
+                    'end_time' => '23:59:59',
+                    'reason' => $validated['reason'] ?? 'Concediu/Inactiv',
+                ]
+            );
+            $current->addDay();
+        }
 
-        return back()->with('success', 'Ziua a fost blocată.');
+        return back()->with('success', 'Zilele au fost blocate.');
     }
 
     public function unblock($id)
