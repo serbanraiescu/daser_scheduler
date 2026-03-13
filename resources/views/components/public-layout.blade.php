@@ -50,25 +50,37 @@
                             <div class="w-10 h-10 bg-[var(--primary-color)] rounded-xl flex items-center justify-center mr-3 group-hover:rotate-6 transition-transform">
                                 <span class="text-white font-black text-xl">{{ substr($settings->business_name ?? 'D', 0, 1) }}</span>
                             </div>
-                            <span class="text-xl font-black tracking-tighter text-gray-900 uppercase">{{ $settings->business_name ?? 'Daser' }}<span class="text-[var(--secondary-color)]">.</span></span>
+                            <span 
+                                :class="scrolled ? 'text-gray-900' : 'text-white'"
+                                class="text-xl font-black tracking-tighter uppercase transition-colors duration-300"
+                            >
+                                {{ $settings->business_name ?? 'Daser' }}<span class="text-[var(--secondary-color)]">.</span>
+                            </span>
                         @endif
                     </a>
                 </div>
 
                 <!-- Desktop Menu -->
                 <nav class="hidden lg:flex items-center gap-8">
-                    <a href="#services" class="text-sm font-semibold text-gray-600 hover:text-[var(--primary-color)] transition-colors">Servicii</a>
-                    <a href="#team" class="text-sm font-semibold text-gray-600 hover:text-[var(--primary-color)] transition-colors">Echipa</a>
-                    <a href="#contact" class="text-sm font-semibold text-gray-600 hover:text-[var(--primary-color)] transition-colors">Contact</a>
+                    @php
+                        $navClasses = "text-sm font-semibold transition-colors duration-300";
+                        $navScrolled = "text-gray-600 hover:text-[var(--primary-color)]";
+                        $navTop = "text-white/90 hover:text-white";
+                    @endphp
+                    <a href="#services" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Servicii</a>
+                    <a href="#team" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Echipa</a>
+                    <a href="#contact" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Contact</a>
                     @if(isset($pagesHeader))
                         @foreach($pagesHeader as $headerPage)
-                            <a href="{{ url('/page/' . $headerPage->slug) }}" class="text-sm font-semibold text-gray-600 hover:text-[var(--primary-color)] transition-colors">{{ $headerPage->title }}</a>
+                            <a href="{{ url('/page/' . $headerPage->slug) }}" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">{{ $headerPage->title }}</a>
                         @endforeach
                     @endif
                     
-                    <div class="h-6 w-px bg-gray-200 ml-4 mr-2"></div>
+                    <div class="h-6 w-px bg-gray-200/20 ml-4 mr-2" :class="scrolled ? 'bg-gray-200' : 'bg-white/20'"></div>
                     
-                    <a href="{{ route('login') }}" class="text-sm font-bold text-gray-900 hover:opacity-70 transition-opacity px-4 py-2 border-2 border-gray-900 rounded-full">
+                    <a href="{{ route('login') }}" 
+                       :class="scrolled ? 'text-gray-900 border-gray-900' : 'text-white border-white/30 hover:border-white'"
+                       class="text-sm font-bold transition-all px-4 py-2 border-2 rounded-full">
                         Autentificare
                     </a>
                     <a href="{{ route('bookings.index') }}" class="inline-flex items-center px-7 py-3 border border-transparent text-sm font-black rounded-full text-white bg-[var(--primary-color)] hover:shadow-2xl hover:shadow-[var(--primary-color)]/30 transition shadow-xl shadow-[var(--primary-color)]/20">
@@ -78,7 +90,7 @@
 
                 <!-- Mobile menu button -->
                 <div class="flex items-center lg:hidden" x-data="{ open: false }">
-                    <button @click="open = !open" class="text-gray-900 p-2">
+                    <button @click="open = !open" :class="scrolled ? 'text-gray-900' : 'text-white'" class="p-2 transition-colors duration-300">
                         <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
                             <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
