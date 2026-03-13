@@ -86,11 +86,16 @@
             <div class="p-8 sm:p-10 bg-gray-50/50 border-t border-gray-50 space-y-4">
                 @if($booking->status !== 'cancelled' && $booking->start_time->gt(now()))
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <a href="{{ route('bookings.ics', $booking->manage_token) }}" 
-                           class="flex items-center justify-center gap-3 h-14 bg-gray-900 text-white rounded-2xl font-black text-sm hover:scale-[1.02] transition shadow-xl shadow-gray-900/20 active:scale-95">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            ADĂUGA ÎN CALENDAR
-                        </a>
+                        <div class="flex flex-col gap-2">
+                            <a href="{{ route('bookings.ics', $booking->manage_token) }}" 
+                               class="flex items-center justify-center gap-3 h-14 bg-gray-900 text-white rounded-2xl font-black text-sm hover:scale-[1.02] transition shadow-xl shadow-gray-900/20 active:scale-95">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                ADĂUGA ÎN CALENDAR
+                            </a>
+                            <span class="text-[10px] text-gray-400 font-bold text-center uppercase tracking-wider">
+                                * Descarcă și deschide fișierul pentru salvare
+                            </span>
+                        </div>
                         
                         <form action="{{ route('bookings.cancel', $booking->manage_token) }}" method="POST" onsubmit="return confirm('Ești sigur că vrei să anulezi programarea?')">
                             @csrf
