@@ -2,6 +2,17 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
+// Temporary migration route for CMS deployment
+Route::get('/migrate-cms', function() {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return "Migration successful! Output: " . Artisan::output();
+    } catch (\Exception $e) {
+        return "Error during migration: " . $e->getMessage();
+    }
+});
 
 Route::middleware(['check.license'])->group(function () {
     Route::get('/', [\App\Http\Controllers\PublicBookingController::class, 'index'])->name('bookings.index');
