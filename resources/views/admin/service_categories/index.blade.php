@@ -18,6 +18,14 @@
                 </div>
             @endif
 
+            @if(isset($error))
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    <strong class="font-bold">Error:</strong>
+                    <span class="block sm:inline">{{ $error }}</span>
+                    <p class="mt-2 text-sm">Run <code>php artisan migrate --force</code> to fix this.</p>
+                </div>
+            @endif
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <table class="min-w-full divide-y divide-gray-200">

@@ -10,25 +10,42 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $services = Service::with('category')->get();
-        return view('admin.services.index', compact('services'));
+        $hasTable = \Schema::hasTable('service_categories');
+        $services = Service::query()->when($hasTable, function($q) {
+            return $q->with('category');
+        })->get();
+        
+        $view = view('admin.services.index', compact('services'));
+        
+        if (!$hasTable) {
+            $view->with('error', 'Table service_categories missing. Some features may be limited.');
+        }
+        
+        return $view;
     }
 
     public function create()
     {
-        $categories = \App\Models\ServiceCategory::where('active', true)->get();
+        $categories = \Schema::hasTable('service_categories') 
+            ? \App\Models\ServiceCategory::where('active', true)->get()
+            : collect();
         return view('admin.services.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:service_categories,id',
             'duration_minutes' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-        ]);
+        ];
+
+        if (\Schema::hasTable('service_categories')) {
+            $rules['category_id'] = 'nullable|exists:service_categories,id';
+        }
+
+        $validated = $request->validate($rules);
 
         Service::create($validated);
 
@@ -37,20 +54,27 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        $categories = \App\Models\ServiceCategory::where('active', true)->get();
+        $categories = \Schema::hasTable('service_categories') 
+            ? \App\Models\ServiceCategory::where('active', true)->get()
+            : collect();
         return view('admin.services.edit', compact('service', 'categories'));
     }
 
     public function update(Request $request, Service $service)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:service_categories,id',
             'duration_minutes' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'active' => 'boolean',
-        ]);
+        ];
+
+        if (\Schema::hasTable('service_categories')) {
+            $rules['category_id'] = 'nullable|exists:service_categories,id';
+        }
+
+        $validated = $request->validate($rules);
 
         $service->update($validated);
 

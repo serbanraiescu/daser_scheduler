@@ -288,27 +288,35 @@
                             const res = await fetch('/booking/api/categories');
                             if (!res.ok) throw new Error('Failed to fetch categories');
                             
-                            this.categories = await res.json();
+                            const data = await res.json();
+                            this.categories = Array.isArray(data) ? data : [];
                             
                             if (this.categories.length === 0) {
                                 this.hasCategories = false;
-                                this.fetchServices(null);
+                                await this.fetchServices(null);
                                 this.currentStep = 2;
                             } else {
                                 this.hasCategories = true;
                             }
                         } catch (e) {
-                            console.error(e);
-                            // Fallback: assume no categories and show all services
+                            console.error('Category Fetch Error:', e);
                             this.hasCategories = false;
-                            this.fetchServices(null);
+                            this.categories = [];
+                            await this.fetchServices(null);
                             this.currentStep = 2;
                         }
                     },
 
                     async fetchServices(categoryId) {
-                        const res = await fetch(`/booking/api/services?category_id=${categoryId}`);
-                        this.services = await res.json();
+                        try {
+                            const url = categoryId ? `/booking/api/services?category_id=${categoryId}` : '/booking/api/services';
+                            const res = await fetch(url);
+                            if (!res.ok) throw new Error('Failed to fetch services');
+                            this.services = await res.json();
+                        } catch (e) {
+                            console.error('Service Fetch Error:', e);
+                            this.services = [];
+                        }
                     },
 
                     async fetchSlots() {

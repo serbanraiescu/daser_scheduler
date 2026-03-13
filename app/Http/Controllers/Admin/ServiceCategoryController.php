@@ -10,6 +10,10 @@ class ServiceCategoryController extends Controller
 {
     public function index()
     {
+        if (!\Schema::hasTable('service_categories')) {
+            $categories = collect();
+            return view('admin.service_categories.index', compact('categories'))->with('error', 'Table service_categories missing. Please run migrations.');
+        }
         $categories = ServiceCategory::all();
         return view('admin.service_categories.index', compact('categories'));
     }
