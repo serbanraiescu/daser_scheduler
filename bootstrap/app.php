@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'check.license' => \App\Http\Middleware\CheckLicense::class,
+            'impersonate' => \App\Http\Middleware\ImpersonateMiddleware::class,
+        ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\ImpersonateMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
         Route::resource('service-categories', \App\Http\Controllers\Admin\ServiceCategoryController::class);
         Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class);
+        Route::post('/employees/{user}/impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'start'])->name('employees.impersonate');
+        Route::post('/employees/stop-impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'stop'])->name('employees.stop-impersonate');
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::patch('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
         Route::post('/settings/migrate', [\App\Http\Controllers\Admin\SettingController::class, 'migrate'])->name('settings.migrate');
@@ -83,6 +85,8 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
     // Employee Routes
     Route::middleware(['role:employee'])->prefix('employee')->name('employee.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Employee\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/schedule', [\App\Http\Controllers\Employee\ScheduleController::class, 'index'])->name('schedule.index');
+        Route::post('/schedule', [\App\Http\Controllers\Employee\ScheduleController::class, 'update'])->name('schedule.update');
     });
 });
 

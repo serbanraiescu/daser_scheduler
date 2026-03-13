@@ -15,6 +15,22 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased" x-data="{ sidebarOpen: false }">
+        @if(session()->has('impersonate_id'))
+            <div class="bg-indigo-600 text-white py-2 px-4 flex justify-between items-center sticky top-0 z-[100]">
+                <div class="flex items-center text-sm">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span>Acționezi în numele lui <strong>{{ auth()->user()->name }}</strong> (Vizualizare Angajat)</span>
+                </div>
+                <form action="{{ route('admin.employees.stop-impersonate') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-white text-indigo-600 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-gray-100 transition">
+                        Înapoi la Admin
+                    </button>
+                </form>
+            </div>
+        @endif
         <div class="min-h-screen bg-gray-100">
             @include('layouts.sidebar')
 
