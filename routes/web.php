@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         })->name('license.reverify');
 
         Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
-        Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
+        Route::resource('service-categories', \App\Http\Controllers\Admin\ServiceCategoryController::class);
         Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class);
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::patch('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');

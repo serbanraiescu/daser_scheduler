@@ -19,6 +19,19 @@
                             </div>
 
                             <div>
+                                <x-input-label for="category_id" :value="__('Category')" />
+                                <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <option value="">{{ __('No Category') }}</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                            </div>
+
+                            <div>
                                 <x-input-label for="duration_minutes" :value="__('Duration (minutes)')" />
                                 <x-text-input id="duration_minutes" class="block mt-1 w-full" type="number" name="duration_minutes" :value="old('duration_minutes')" required />
                                 <x-input-error :messages="$errors->get('duration_minutes')" class="mt-2" />

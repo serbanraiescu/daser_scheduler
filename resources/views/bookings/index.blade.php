@@ -4,17 +4,17 @@
         <!-- Progress Indicator -->
         <div class="flex items-center justify-between mb-12">
             <template x-for="(step, index) in steps" :key="index">
-                <div class="flex items-center flex-1 last:flex-none">
+                <div class="flex items-center flex-1 last:flex-none" x-show="!(index === 0 && !hasCategories)">
                     <div class="relative flex flex-col items-center group">
                         <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300"
                              :class="currentStep >= index + 1 ? 'bg-primary border-primary text-white shadow-lg' : 'bg-white border-gray-200 text-gray-400'">
-                            <span class="text-xs font-black" x-text="index + 1"></span>
+                            <span class="text-xs font-black" x-text="hasCategories ? index + 1 : index"></span>
                         </div>
                         <span class="absolute -bottom-6 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap hidden sm:block"
                               :class="currentStep >= index + 1 ? 'text-gray-900' : 'text-gray-400'"
                               x-text="step.name"></span>
                     </div>
-                    <div x-if="index < steps.length - 1" class="flex-grow h-0.5 mx-2 rounded-full transition-all duration-500"
+                    <div x-show="index < steps.length - 1" class="flex-grow h-0.5 mx-2 rounded-full transition-all duration-500"
                          :class="currentStep > index + 1 ? 'bg-primary' : 'bg-gray-100'"></div>
                 </div>
             </template>
@@ -52,10 +52,10 @@
         <!-- Step 2: Service List -->
         <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-300">
             <div class="flex items-center mb-8">
-                <button @click="currentStep = 1" class="p-2 -ml-2 text-gray-400 hover:text-gray-600">
+                <button @click="hasCategories ? currentStep = 1 : window.location.href='/'" class="p-2 -ml-2 text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </button>
-                <h2 class="text-2xl font-black text-gray-900 ml-2" x-text="selectedCategory?.name"></h2>
+                <h2 class="text-2xl font-black text-gray-900 ml-2" x-text="selectedCategory ? selectedCategory.name : 'Servicii disponibile'"></h2>
             </div>
             
             <div class="space-y-4">
@@ -257,6 +257,7 @@
                         { name: 'Confirmare' }
                     ],
                     categories: [],
+                    hasCategories: true,
                     services: [],
                     availableSlots: [],
                     calendarDates: [],
@@ -283,8 +284,20 @@
                     },
 
                     async fetchCategories() {
-                        const res = await fetch('/booking/api/categories');
-                        this.categories = await res.json();
+                        try {
+                            const res = await fetch('/booking/api/categories');
+                            this.categories = await res.json();
+                            
+                            if (this.categories.length === 0) {
+                                this.hasCategories = false;
+                                this.fetchServices(null);
+                                this.currentStep = 2;
+                            } else {
+                                this.hasCategories = true;
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
                     },
 
                     async fetchServices(categoryId) {

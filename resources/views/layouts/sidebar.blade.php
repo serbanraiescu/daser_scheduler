@@ -29,6 +29,15 @@
                 </a>
             </li>
 
+            <!-- Categorii -->
+            <li>
+                <a href="{{ route('admin.service-categories.index') }}" 
+                   class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('admin.service-categories.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                    <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('admin.service-categories.*') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Categorii</span>
+                </a>
+            </li>
+
             <!-- Angajati -->
             <li>
                 <a href="{{ route('admin.employees.index') }}" 
