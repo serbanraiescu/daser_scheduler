@@ -23,6 +23,9 @@ class PublicBookingController extends Controller
 
     public function apiCategories()
     {
+        if (!\Schema::hasTable('service_categories')) {
+            return response()->json([]);
+        }
         $categories = \App\Models\ServiceCategory::where('active', true)->get();
         return response()->json($categories);
     }
@@ -31,7 +34,7 @@ class PublicBookingController extends Controller
     {
         $categoryId = $request->input('category_id');
         $services = Service::where('active', true)
-            ->when($categoryId, function($query) use ($categoryId) {
+            ->when($categoryId && \Schema::hasColumn('services', 'category_id'), function($query) use ($categoryId) {
                 return $query->where('category_id', $categoryId);
             })
             ->get();

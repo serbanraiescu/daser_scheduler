@@ -286,6 +286,8 @@
                     async fetchCategories() {
                         try {
                             const res = await fetch('/booking/api/categories');
+                            if (!res.ok) throw new Error('Failed to fetch categories');
+                            
                             this.categories = await res.json();
                             
                             if (this.categories.length === 0) {
@@ -297,6 +299,10 @@
                             }
                         } catch (e) {
                             console.error(e);
+                            // Fallback: assume no categories and show all services
+                            this.hasCategories = false;
+                            this.fetchServices(null);
+                            this.currentStep = 2;
                         }
                     },
 
