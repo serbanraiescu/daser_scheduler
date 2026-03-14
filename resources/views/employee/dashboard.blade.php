@@ -36,14 +36,34 @@
 
             <!-- Appointments List -->
             <div class="bg-white rounded-3xl border shadow-sm overflow-hidden">
-                <div class="p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h3 class="text-lg font-bold">Programările din {{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</h3>
-                    
-                    <form action="{{ route('employee.dashboard') }}" method="GET" class="flex items-center gap-2">
-                        <input type="date" name="date" value="{{ $date }}" 
-                            onchange="this.form.submit()"
-                            class="rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    </form>
+                <div class="p-6 border-b flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold">Programările din {{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</h3>
+                        
+                        <form action="{{ route('employee.dashboard') }}" method="GET" class="flex items-center gap-2 lg:hidden">
+                            <input type="date" name="date" value="{{ $date }}" 
+                                onchange="this.form.submit()"
+                                class="rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        </form>
+                    </div>
+
+                    <!-- Horizontal Calendar -->
+                    <div class="flex overflow-x-auto hide-scrollbar gap-3 pb-2 -mx-6 px-6 sm:mx-0 sm:px-0">
+                        @foreach($calendar as $day)
+                            @php
+                                $isSelected = $date === $day['date'];
+                                $isToday = now()->toDateString() === $day['date'];
+                            @endphp
+                            <a href="{{ route('employee.dashboard', ['date' => $day['date']]) }}" 
+                               class="flex-shrink-0 w-16 h-20 rounded-2xl flex flex-col items-center justify-center border transition-all {{ $isSelected ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-600/30' : ($isToday ? 'bg-indigo-50 border-indigo-100 text-indigo-900' : 'bg-white border-gray-100 text-gray-600 hover:border-indigo-200 hover:bg-gray-50') }}">
+                                <span class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-80">{{ $day['dayName'] }}</span>
+                                <span class="text-xl font-black">{{ $day['dayNumber'] }}</span>
+                                @if($isToday && !$isSelected)
+                                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1 absolute bottom-2"></span>
+                                @endif
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
 
                 <div class="divide-y divide-gray-100">

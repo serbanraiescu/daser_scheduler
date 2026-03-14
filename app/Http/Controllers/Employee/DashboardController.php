@@ -23,7 +23,18 @@ class DashboardController extends Controller
             'upcoming' => \App\Models\Booking::where('employee_id', $employee->id)->where('date', '>', now()->toDateString())->count(),
         ];
 
-        return view('employee.dashboard', compact('bookings', 'date', 'stats'));
+        // Generate 14-day calendar
+        $calendar = [];
+        for ($i = 0; $i < 14; $i++) {
+            $d = now()->addDays($i);
+            $calendar[] = [
+                'date' => $d->toDateString(),
+                'dayName' => $d->translatedFormat('D'), // short day name
+                'dayNumber' => $d->format('d'),
+            ];
+        }
+
+        return view('employee.dashboard', compact('bookings', 'date', 'stats', 'calendar'));
     }
 
     public function create()
