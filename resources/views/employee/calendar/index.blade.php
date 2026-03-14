@@ -14,7 +14,7 @@
                     </a>
                 </div>
 
-                <div id="calendar" class="fc-theme-standard"></div>
+                <div id="calendar" class="fc-theme-standard overflow-visible"></div>
             </div>
         </div>
     </div>
@@ -139,15 +139,25 @@
         .fc-theme-standard td, .fc-theme-standard th {
             border-color: #f3f4f6;
         }
-        /* Sticky Header Fix */
-        .fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > td {
+        
+        /* Aggressive Sticky Header Fix */
+        .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > td,
+        .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > th {
             top: 64px !important; /* Mobile Header Height */
             background: #fff !important;
-            z-index: 10;
+            z-index: 100 !important;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06);
         }
+
+        /* Ensure parent visibility for sticky to work */
+        .fc-scrollgrid, .fc-scrollgrid-section, .fc-scrollgrid-section-header {
+            overflow: visible !important;
+        }
+
         @media (min-width: 640px) {
-            .fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > td {
-                top: 0 !important; /* No mobile bar on desktop or different layout */
+            .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > td,
+            .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > th {
+                top: 0 !important;
             }
         }
         /* Mobile specific styling */
