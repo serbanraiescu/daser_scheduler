@@ -103,6 +103,15 @@
                     </a>
                 </li>
                 
+                <!-- Employee Agenda Calendar -->
+                <li>
+                    <a href="{{ route('employee.calendar.index') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('employee.calendar.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('employee.calendar.*') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                        <span class="ms-3">Agendă Programări</span>
+                    </a>
+                </li>
+                
                 <!-- Sidebar Calendar (Employees Only) -->
                 @isset($sidebarCalendarWeeks)
                 <li class="pt-6 mt-6 border-t border-gray-800">

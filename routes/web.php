@@ -94,6 +94,10 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::get('/bookings/create', [\App\Http\Controllers\Employee\DashboardController::class, 'create'])->name('bookings.create');
         Route::post('/bookings', [\App\Http\Controllers\Employee\DashboardController::class, 'store'])->name('bookings.store');
         
+        // Agenda Calendar
+        Route::get('/calendar', [\App\Http\Controllers\Employee\CalendarController::class, 'index'])->name('calendar.index');
+        Route::get('/calendar/events', [\App\Http\Controllers\Employee\CalendarController::class, 'events'])->name('calendar.events');
+        
         // Schedule
         Route::get('/schedule', [\App\Http\Controllers\Employee\ScheduleController::class, 'index'])->name('schedule.index');
         Route::post('/schedule', [\App\Http\Controllers\Employee\ScheduleController::class, 'update'])->name('schedule.update');
