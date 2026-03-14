@@ -1,8 +1,8 @@
-@props(['name', 'value' => '09:00'])
+@props(['name', 'value' => '09:00', 'minHour' => 0, 'maxHour' => 23])
 
 <style>[x-cloak] { display: none !important; }</style>
 
-<div x-data="radialTimePicker('{{ $value }}')" 
+<div x-data="radialTimePicker('{{ $value }}', {{ $minHour }}, {{ $maxHour }})" 
      x-modelable="internalTime"
      {{ $attributes->only('x-model') }}
      class="relative flex flex-col items-center bg-white p-6 rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
@@ -38,9 +38,10 @@
             </div>
         </div>
 
-        <!-- Outer Ring (Hours 0-23) -->
+        <!-- Outer Ring (Hours Limited by Schedule) -->
         <template x-for="h in 24" :key="'h-'+h">
             <button type="button" 
+                    x-show="(h % 24) >= minHour && (h % 24) <= maxHour"
                     @click="setHour(h % 24)"
                     class="absolute w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-200 hover:bg-indigo-100 hover:text-indigo-700 z-10"
                     :class="hour === (h % 24) ? 'text-indigo-700 bg-indigo-50' : 'text-gray-400'"
@@ -79,15 +80,24 @@
 </div>
 
 <script>
-function radialTimePicker(initialValue) {
+function radialTimePicker(initialValue, minHour = 0, maxHour = 23) {
     const parts = (initialValue || '09:00').split(':');
+    let startHour = parseInt(parts[0]);
+    
+    // Clamp initial hour to range
+    if (startHour < minHour) startHour = minHour;
+    if (startHour > maxHour) startHour = maxHour;
+
     return {
-        hour: parseInt(parts[0]),
+        hour: startHour,
         minute: parseInt(parts[1]),
+        minHour: minHour,
+        maxHour: maxHour,
         activeTab: 'hour',
         internalTime: initialValue || '09:00',
         
         init() {
+            this.updateInternal(); // Ensure clamped values reflect in internalTime
             this.$watch('hour', () => this.updateInternal());
             this.$watch('minute', () => this.updateInternal());
             this.$watch('internalTime', (val) => {
@@ -104,7 +114,7 @@ function radialTimePicker(initialValue) {
         },
 
         get formattedTime() {
-            return this.updateInternal(), this.internalTime;
+            return this.internalTime;
         },
         get hourRotation() {
             return this.hour * 15;

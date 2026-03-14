@@ -40,7 +40,36 @@ class DashboardController extends Controller
     public function create()
     {
         $services = \App\Models\Service::where('active', true)->get();
-        return view('employee.bookings.create', compact('services'));
+        $employee = auth()->user()->employee;
+        $date = request('date', now()->toDateString());
+        $carbonDate = \Carbon\Carbon::parse($date);
+        
+        $minHour = 0;
+        $maxHour = 23;
+
+        if ($employee) {
+            // Check specific schedule override
+            $schedule = \App\Models\EmployeeSchedule::where('employee_id', $employee->id)
+                ->whereDate('date', $date)
+                ->first();
+
+            if (!$schedule || $schedule->is_off) {
+                // Check standard schedule
+                $schedule = \App\Models\StandardSchedule::where('employee_id', $employee->id)
+                    ->where('day_of_week', $carbonDate->dayOfWeek)
+                    ->first();
+            }
+
+            if ($schedule && !$schedule->is_off) {
+                $startHour = (int) explode(':', $schedule->start_time)[0];
+                $endHour = (int) explode(':', $schedule->end_time)[0];
+                
+                $minHour = max(0, $startHour - 2);
+                $maxHour = min(23, $endHour + 2);
+            }
+        }
+
+        return view('employee.bookings.create', compact('services', 'minHour', 'maxHour'));
     }
 
     public function store(Request $request)

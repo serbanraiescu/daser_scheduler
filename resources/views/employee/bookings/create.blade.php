@@ -96,7 +96,7 @@
 
                                 <div x-show="showRadial" x-cloak class="mt-4">
                                     <label class="block text-sm font-bold text-gray-700 mb-4">Selectează Ora (Radial)</label>
-                                    <x-radial-time-picker name="ignore_time_radial" x-model="timeValue" />
+                                    <x-radial-time-picker name="ignore_time_radial" x-model="timeValue" :min-hour="$minHour" :max-hour="$maxHour" />
                                 </div>
                                 
                                 <input type="hidden" name="time" :value="timeValue">
