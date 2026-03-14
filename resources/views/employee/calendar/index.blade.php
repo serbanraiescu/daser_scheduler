@@ -29,7 +29,8 @@
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'ro',
-                initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
+                initialView: 'timeGridWeek',
+                dayMinWidth: 120, // Forces horizontal scroll if width is too small (e.g., mobile)
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
