@@ -36,7 +36,9 @@
 
             <div :class="{'sm:ml-64': {{ auth()->user()->isAdmin() ? 'true' : 'false' }}}">
                 @include('layouts.navigation')
-                <x-license-alerts />
+                @if(auth()->user()->isAdmin())
+                    <x-license-alerts />
+                @endif
 
                 <!-- Page Heading -->
                 @isset($header)
