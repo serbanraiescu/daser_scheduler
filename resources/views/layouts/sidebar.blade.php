@@ -102,6 +102,49 @@
                         <span class="ms-3">Programul Meu</span>
                     </a>
                 </li>
+                
+                <!-- Sidebar Calendar (Employees Only) -->
+                @isset($sidebarCalendarWeeks)
+                <li class="pt-6 mt-6 border-t border-gray-800">
+                    <div class="px-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest">{{ $sidebarCurrentMonth }}</h4>
+                        </div>
+                        
+                        <!-- Calendar Grid -->
+                        <div class="bg-gray-800/50 rounded-xl p-3 border border-gray-700/50">
+                            <!-- Days Header -->
+                            <div class="grid grid-cols-7 gap-1 mb-2">
+                                @foreach(['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sâ', 'Du'] as $day)
+                                    <div class="text-[10px] font-bold text-center text-gray-500">{{ $day }}</div>
+                                @endforeach
+                            </div>
+                            
+                            <!-- Calendar Weeks -->
+                            <div class="space-y-1">
+                                @foreach($sidebarCalendarWeeks as $week)
+                                    <div class="grid grid-cols-7 gap-1">
+                                        @foreach($week as $day)
+                                            <a href="{{ route('employee.dashboard', ['date' => $day['date']]) }}" 
+                                               class="h-7 w-full flex items-center justify-center rounded-lg text-xs transition-all hover:bg-gray-700 hover:text-white
+                                               {{ !$day['isCurrentMonth'] ? 'text-gray-600 opacity-50' : 'text-gray-300' }}
+                                               {{ $day['isToday'] && !$day['isSelected'] ? 'ring-1 ring-indigo-500/50 font-bold' : '' }}
+                                               {{ $day['isSelected'] ? 'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-900/50' : '' }}"
+                                               title="{{ \Carbon\Carbon::parse($day['date'])->translatedFormat('d F Y') }}">
+                                                {{ $day['dayNumber'] }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <a href="{{ route('employee.bookings.create') }}" class="mt-4 flex items-center justify-center w-full px-4 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-800 transition shadow-lg shadow-indigo-900/20 active:scale-95">
+                            + Adaugă Programare
+                        </a>
+                    </div>
+                </li>
+                @endisset
             @endif
         </ul>
 
