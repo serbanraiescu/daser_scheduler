@@ -98,6 +98,15 @@
                                     :class="{'bg-indigo-50 border-indigo-200': highlighted}">
                                 <x-input-error :messages="$errors->get('client_phone')" class="mt-2" />
                             </div>
+
+                            <!-- Client Email -->
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Email Client (Opțional)</label>
+                                <input type="email" name="client_email" x-model="clientEmail" placeholder="Ex: client@email.com"
+                                    class="block w-full rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                    :class="{'bg-indigo-50 border-indigo-200': highlighted}">
+                                <x-input-error :messages="$errors->get('client_email')" class="mt-2" />
+                            </div>
                         </div>
 
                         <div class="pt-6 border-t flex justify-between items-center">
@@ -129,6 +138,7 @@
                 searchQuery: '',
                 clientName: '{{ old("client_name") }}',
                 clientPhone: '{{ old("client_phone") }}',
+                clientEmail: '{{ old("client_email") }}',
                 results: [],
                 isSearching: false,
                 queryTyped: false,
@@ -154,6 +164,7 @@
                 selectClient(client) {
                     this.clientName = client.name;
                     this.clientPhone = client.phone;
+                    this.clientEmail = client.email || '';
                     this.searchQuery = '';
                     this.results = [];
                     this.queryTyped = false;

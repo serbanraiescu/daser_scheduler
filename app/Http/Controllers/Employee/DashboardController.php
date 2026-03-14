@@ -51,6 +51,7 @@ class DashboardController extends Controller
             'time' => 'required',
             'client_name' => 'required|string|max:255',
             'client_phone' => 'required|string|max:20',
+            'client_email' => 'nullable|email|max:255',
         ]);
 
         $service = \App\Models\Service::findOrFail($validated['service_id']);
@@ -63,8 +64,14 @@ class DashboardController extends Controller
 
         $client = \App\Models\Client::firstOrCreate(
             ['phone' => $validated['client_phone']],
-            ['name' => $validated['client_name']]
+            ['name' => $validated['client_name'], 'email' => $validated['client_email']]
         );
+
+        // Update email if it was previously null but provided now
+        if ($validated['client_email'] && !$client->email) {
+            $client->update(['email' => $validated['client_email']]);
+        }
+
 
         \App\Models\Booking::create([
             'client_id' => $client->id,
@@ -92,7 +99,7 @@ class DashboardController extends Controller
         $clients = \App\Models\Client::where('name', 'like', "%{$query}%")
             ->orWhere('phone', 'like', "%{$query}%")
             ->limit(5)
-            ->get(['name', 'phone']);
+            ->get(['name', 'phone', 'email']);
 
         return response()->json($clients);
     }
