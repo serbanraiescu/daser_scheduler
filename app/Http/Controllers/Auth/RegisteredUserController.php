@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Client;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,7 +41,14 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'client',
         ]);
+
+        // Link to existing client record if found
+        $client = Client::where('email', $request->email)->first();
+        if ($client) {
+            $client->update(['user_id' => $user->id]);
+        }
 
         event(new Registered($user));
 

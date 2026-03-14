@@ -44,8 +44,10 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
     Route::get('/dashboard', function () {
         if (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin') {
             return redirect()->route('admin.dashboard');
+        } elseif (auth()->user()->role === 'employee') {
+            return redirect()->route('employee.dashboard');
         }
-        return redirect()->route('employee.dashboard');
+        return redirect()->route('client.dashboard');
     })->name('dashboard');
 
     Route::post('/admin/stop-impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'stop'])->name('admin.employees.stop-impersonate');
@@ -105,6 +107,13 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::post('/schedule/standard', [\App\Http\Controllers\Employee\ScheduleController::class, 'updateStandard'])->name('schedule.standard.update');
         Route::post('/schedule/block', [\App\Http\Controllers\Employee\ScheduleController::class, 'block'])->name('schedule.block');
         Route::delete('/schedule/unblock/{id}', [\App\Http\Controllers\Employee\ScheduleController::class, 'unblock'])->name('schedule.unblock');
+    });
+
+    // Client Routes
+    Route::middleware(['role:client'])->prefix('account')->name('client.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/history', [\App\Http\Controllers\Client\DashboardController::class, 'history'])->name('history');
+        Route::get('/vouchers', [\App\Http\Controllers\Client\DashboardController::class, 'vouchers'])->name('vouchers');
     });
 });
 

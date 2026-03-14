@@ -37,7 +37,10 @@ class ClientController extends Controller
             'email' => 'nullable|email',
             'birth_date' => 'nullable|date',
             'notes' => 'nullable|string',
-            'tags' => 'nullable|string', // Comma separated tags
+            'tags' => 'nullable|string',
+            'loyalty_points' => 'nullable|integer',
+            'special_discount' => 'nullable|numeric|min:0|max:100',
+            'fidelity_card_number' => 'nullable|string|unique:clients,fidelity_card_number',
         ]);
 
         $client = Client::create($validated);
@@ -71,6 +74,9 @@ class ClientController extends Controller
             'birth_date' => 'nullable|date',
             'notes' => 'nullable|string',
             'tags' => 'nullable|string',
+            'loyalty_points' => 'nullable|integer',
+            'special_discount' => 'nullable|numeric|min:0|max:100',
+            'fidelity_card_number' => 'nullable|string|unique:clients,fidelity_card_number,'.$client->id,
         ]);
 
         $client->update($validated);

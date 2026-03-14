@@ -8,11 +8,19 @@ use Illuminate\Notifications\Notifiable;
 class Client extends Model
 {
     use Notifiable;
-    protected $fillable = ['name', 'phone', 'email', 'birth_date', 'notes'];
+    protected $fillable = [
+        'name', 'phone', 'email', 'birth_date', 'notes',
+        'user_id', 'loyalty_points', 'special_discount', 'fidelity_card_number'
+    ];
 
     protected $casts = [
         'birth_date' => 'date',
+        'special_discount' => 'decimal:2',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function bookings()
     {

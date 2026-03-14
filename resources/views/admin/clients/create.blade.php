@@ -44,6 +44,26 @@
                                 <x-input-error :messages="$errors->get('tags')" class="mt-2" />
                             </div>
 
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <x-input-label for="loyalty_points" :value="__('Loyalty Points')" />
+                                    <x-text-input id="loyalty_points" class="block mt-1 w-full" type="number" name="loyalty_points" :value="old('loyalty_points', 0)" />
+                                    <x-input-error :messages="$errors->get('loyalty_points')" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="special_discount" :value="__('Special Discount (%)')" />
+                                    <x-text-input id="special_discount" class="block mt-1 w-full" type="number" step="0.01" name="special_discount" :value="old('special_discount', 0)" />
+                                    <x-input-error :messages="$errors->get('special_discount')" class="mt-2" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="fidelity_card_number" :value="__('Fidelity Card Number')" />
+                                    <x-text-input id="fidelity_card_number" class="block mt-1 w-full" type="text" name="fidelity_card_number" :value="old('fidelity_card_number')" />
+                                    <x-input-error :messages="$errors->get('fidelity_card_number')" class="mt-2" />
+                                </div>
+                            </div>
+
                             <div>
                                 <x-input-label for="notes" :value="__('Notes')" />
                                 <textarea id="notes" name="notes" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('notes') }}</textarea>

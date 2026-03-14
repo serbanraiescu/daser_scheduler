@@ -38,6 +38,11 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class);
     }
 
+    public function client()
+    {
+        return $this->hasOne(Client::class);
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'employee_id');
