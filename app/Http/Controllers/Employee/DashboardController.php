@@ -42,6 +42,7 @@ class DashboardController extends Controller
         $services = \App\Models\Service::where('active', true)->get();
         $employee = auth()->user()->employee;
         $date = request('date', now()->toDateString());
+        $time = request('time', '09:00'); // Default to 09:00 or current request param
         $carbonDate = \Carbon\Carbon::parse($date);
         
         $minHour = 0;
@@ -69,7 +70,7 @@ class DashboardController extends Controller
             }
         }
 
-        return view('employee.bookings.create', compact('services', 'minHour', 'maxHour'));
+        return view('employee.bookings.create', compact('services', 'minHour', 'maxHour', 'time', 'date'));
     }
 
     public function store(Request $request)

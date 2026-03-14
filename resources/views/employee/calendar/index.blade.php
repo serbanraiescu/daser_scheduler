@@ -8,7 +8,7 @@
                         <h2 class="text-3xl font-black text-gray-900 leading-tight">Agenda Programări</h2>
                         <p class="text-sm font-medium text-gray-500 mt-2">Vizualizează orele ocupate și disponibilitatea ta pe zile și săptămâni.</p>
                     </div>
-                    <a href="{{ route('employee.bookings.create') }}" class="inline-flex items-center px-6 py-3 bg-indigo-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-lg shadow-indigo-500/30">
+                    <a href="{{ route('employee.bookings.create') }}" class="hidden sm:inline-flex items-center px-6 py-3 bg-indigo-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-lg shadow-indigo-500/30">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         Adaugă Programare
                     </a>
@@ -18,6 +18,14 @@
             </div>
         </div>
     </div>
+
+    <!-- Mobile Floating Action Button -->
+    <a href="{{ route('employee.bookings.create') }}" 
+       class="sm:hidden fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 rounded-full shadow-2xl flex items-center justify-center text-white z-50 hover:bg-indigo-700 transition-transform active:scale-95">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+        </svg>
+    </a>
 
     <!-- FullCalendar Integration -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.11/index.global.min.js"></script>
@@ -49,8 +57,9 @@
                     }
                 },
                 dateClick: function(info) {
-                    // Pre-fill date when adding booking functionality could be here
-                    // e.g., window.location.href = "/employee/bookings/create?date=" + info.dateStr.split('T')[0];
+                    let datePart = info.dateStr.split('T')[0];
+                    let timePart = info.dateStr.includes('T') ? info.dateStr.split('T')[1].substring(0, 5) : '09:00';
+                    window.location.href = "{{ route('employee.bookings.create') }}?date=" + datePart + "&time=" + timePart;
                 },
                 height: 'auto',
                 stickyHeaderDates: true,

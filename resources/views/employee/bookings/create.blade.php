@@ -12,7 +12,7 @@
                     <form action="{{ route('employee.bookings.store') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ ...clientSearch(), timeValue: '{{ old('time', '09:00') }}' }">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ ...clientSearch(), timeValue: '{{ old('time', $time) }}' }">
 
                             
 
@@ -71,7 +71,7 @@
                             <!-- Date -->
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Data</label>
-                                <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required min="{{ date('Y-m-d') }}"
+                                <input type="date" name="date" value="{{ old('date', $date) }}" required min="{{ date('Y-m-d') }}"
                                     class="block w-full rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                                 <x-input-error :messages="$errors->get('date')" class="mt-2" />
                             </div>
