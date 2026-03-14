@@ -59,6 +59,17 @@ class ClientController extends Controller
         return redirect()->route('admin.clients.index')->with('success', 'Client created successfully.');
     }
 
+    public function show(Client $client)
+    {
+        $bookings = $client->bookings()
+            ->with(['service', 'employee'])
+            ->orderBy('date', 'desc')
+            ->orderBy('start_time', 'desc')
+            ->paginate(20);
+            
+        return view('admin.clients.show', compact('client', 'bookings'));
+    }
+
     public function edit(Client $client)
     {
         $tagsString = $client->tags->pluck('name')->implode(', ');
