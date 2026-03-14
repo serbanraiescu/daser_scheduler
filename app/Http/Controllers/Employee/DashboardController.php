@@ -42,7 +42,8 @@ class DashboardController extends Controller
         $services = \App\Models\Service::where('active', true)->get();
         $employee = auth()->user()->employee;
         $date = request('date', now()->toDateString());
-        $time = request('time', '09:00'); // Default to 09:00 or current request param
+        $time = request('time', '09:00'); 
+        $search = request('search', ''); // New parameter for voice search pre-fill
         $carbonDate = \Carbon\Carbon::parse($date);
         
         $minHour = 0;
@@ -70,7 +71,7 @@ class DashboardController extends Controller
             }
         }
 
-        return view('employee.bookings.create', compact('services', 'minHour', 'maxHour', 'time', 'date'));
+        return view('employee.bookings.create', compact('services', 'minHour', 'maxHour', 'time', 'date', 'search'));
     }
 
     public function store(Request $request)

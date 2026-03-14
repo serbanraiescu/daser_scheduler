@@ -12,7 +12,7 @@
                     <form action="{{ route('employee.bookings.store') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ ...clientSearch(), timeValue: '{{ old('time', $time) }}' }">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ ...clientSearch('{{ $search ?? '' }}'), timeValue: '{{ old('time', $time) }}' }">
 
                             
 
@@ -138,9 +138,9 @@
     </div>
 
     <script>
-        function clientSearch() {
+        function clientSearch(initialSearch = '') {
             return {
-                searchQuery: '',
+                searchQuery: initialSearch,
                 clientName: '{{ old("client_name") }}',
                 clientPhone: '{{ old("client_phone") }}',
                 clientEmail: '{{ old("client_email") }}',
@@ -148,6 +148,11 @@
                 isSearching: false,
                 queryTyped: false,
                 highlighted: false,
+                init() {
+                    if (this.searchQuery.length >= 2) {
+                        this.search();
+                    }
+                },
                 search() {
                     this.queryTyped = true;
                     if (this.searchQuery.length < 2) {
