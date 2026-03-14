@@ -8,12 +8,22 @@
      class="relative flex flex-col items-center bg-white p-6 rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
 
     <!-- Selected Time Display -->
-    <div class="flex items-center gap-2 mb-8 select-none">
-        <div class="px-5 py-3 bg-indigo-50 rounded-2xl border-2 border-indigo-100 flex items-center justify-center min-w-[120px]">
-            <span class="text-4xl font-black text-indigo-700 tracking-tight" x-text="formattedTime"></span>
+    <div class="flex items-center gap-4 mb-8 select-none">
+        <div class="flex items-center bg-indigo-50 rounded-2xl border-2 border-indigo-100 p-1">
+            <button type="button" @click="activeTab = 'hour'" 
+                    class="px-4 py-2 rounded-xl text-4xl font-black transition-all"
+                    :class="activeTab === 'hour' ? 'text-indigo-700 bg-white shadow-sm' : 'text-indigo-300 hover:text-indigo-500'">
+                <span x-text="String(hour).padStart(2, '0')"></span>
+            </button>
+            <span class="text-4xl font-black text-indigo-200">:</span>
+            <button type="button" @click="activeTab = 'minute'" 
+                    class="px-4 py-2 rounded-xl text-4xl font-black transition-all"
+                    :class="activeTab === 'minute' ? 'text-indigo-700 bg-white shadow-sm' : 'text-indigo-300 hover:text-indigo-500'">
+                <span x-text="String(minute).padStart(2, '0')"></span>
+            </button>
         </div>
-        <div class="text-xs font-bold text-gray-400 uppercase vertical-text tracking-widest px-2">
-            Ora Selectată
+        <div class="text-[10px] font-bold text-gray-400 uppercase vertical-text tracking-widest px-1">
+            <span x-text="activeTab === 'hour' ? 'Setează Ora' : 'Setează Minutele'"></span>
         </div>
     </div>
 
@@ -64,19 +74,6 @@
 
     <!-- Hidden Input -->
     <input type="hidden" name="{{ $name }}" :value="formattedTime">
-
-    <div class="mt-8 flex gap-3">
-        <button type="button" @click="activeTab = 'hour'" 
-                class="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                :class="activeTab === 'hour' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-gray-100 text-gray-400'">
-            SETEAZĂ ORA
-        </button>
-        <button type="button" @click="activeTab = 'minute'" 
-                class="px-4 py-2 rounded-xl text-xs font-bold transition-all"
-                :class="activeTab === 'minute' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-gray-100 text-gray-400'">
-            SETEAZĂ MINUTELE
-        </button>
-    </div>
 </div>
 
 <script>
