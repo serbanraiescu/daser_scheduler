@@ -12,7 +12,19 @@
                     <form action="{{ route('employee.bookings.store') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="clientSearch()">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ ...clientSearch(), showRadial: false, timeValue: '{{ old('time', '09:00') }}' }">
+
+                            
+                            <!-- Toggle Picker -->
+                            <div class="md:col-span-2 flex justify-end">
+                                <button type="button" @click="showRadial = !showRadial" 
+                                        class="text-xs font-bold px-3 py-1.5 rounded-lg border flex items-center gap-2 transition-all"
+                                        :class="showRadial ? 'bg-indigo-600 text-white border-indigo-700' : 'bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-300'">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span x-text="showRadial ? 'Folosește selector clasic' : 'Folosește noul selector radial (Beta)'"></span>
+                                </button>
+                            </div>
+
 
                             <!-- Fast Search Bar -->
                             <div class="md:col-span-2 relative mb-2">
@@ -73,13 +85,25 @@
                                 <x-input-error :messages="$errors->get('date')" class="mt-2" />
                             </div>
 
-                            <!-- Time -->
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Ora</label>
-                                <input type="time" name="time" value="{{ old('time') }}" required
-                                    class="block w-full rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <!-- Time Picker Logic -->
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-bold text-gray-700 mb-2" x-show="!showRadial">Ora</label>
+                                
+                                <div x-show="!showRadial">
+                                    <input type="time" x-model="timeValue" required
+                                        class="block w-full rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+
+                                <div x-show="showRadial" x-cloak class="mt-4">
+                                    <label class="block text-sm font-bold text-gray-700 mb-4">Selectează Ora (Radial)</label>
+                                    <x-radial-time-picker name="ignore_time_radial" x-model="timeValue" />
+                                </div>
+                                
+                                <input type="hidden" name="time" :value="timeValue">
                                 <x-input-error :messages="$errors->get('time')" class="mt-2" />
                             </div>
+
+
 
                             <!-- Client Name -->
                             <div>
