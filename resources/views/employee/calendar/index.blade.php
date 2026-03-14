@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-3xl p-6 lg:p-8">
+            <div class="bg-white shadow-xl sm:rounded-3xl p-6 lg:p-8">
                 
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div>
@@ -138,6 +138,17 @@
         }
         .fc-theme-standard td, .fc-theme-standard th {
             border-color: #f3f4f6;
+        }
+        /* Sticky Header Fix */
+        .fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > td {
+            top: 64px !important; /* Mobile Header Height */
+            background: #fff !important;
+            z-index: 10;
+        }
+        @media (min-width: 640px) {
+            .fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > td {
+                top: 0 !important; /* No mobile bar on desktop or different layout */
+            }
         }
         /* Mobile specific styling */
         @media (max-width: 640px) {
