@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\ClientTag;
+use App\Models\Setting;
+use App\Models\Voucher;
+use App\Models\ClientVoucher;
+use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {
@@ -101,6 +105,34 @@ class ClientController extends Controller
                 $tagIds[] = $tag->id;
             }
             $client->tags()->sync($tagIds);
+        }
+
+        // Fidelity Reward Logic
+        $threshold = (int) Setting::getValue('fidelity_points_required', 7);
+        $vouchersIssued = 0;
+
+        while ($client->loyalty_points >= $threshold) {
+            $client->loyalty_points -= $threshold;
+            
+            $voucher = Voucher::create([
+                'code' => 'GRATIS-' . strtoupper(Str::random(6)),
+                'type' => 'percentage',
+                'value' => 100,
+                'max_uses' => 1,
+                'active' => true,
+            ]);
+
+            ClientVoucher::create([
+                'client_id' => $client->id,
+                'voucher_id' => $voucher->id,
+            ]);
+
+            $vouchersIssued++;
+        }
+
+        if ($vouchersIssued > 0) {
+            $client->save();
+            return redirect()->route('admin.clients.index')->with('success', "Client actualizat cu succes. Vouchere recompensă emise: {$vouchersIssued}.");
         }
 
         return redirect()->route('admin.clients.index')->with('success', 'Client updated successfully.');

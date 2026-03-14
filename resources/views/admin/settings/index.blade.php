@@ -55,13 +55,23 @@
                                     <p class="text-xs text-gray-500 mt-1">Clients can book up to this many days in advance.</p>
                                 </div>
                             </div>
+                            <h3 class="text-lg font-bold border-b pb-2 mt-6">Sistem de Fidelitate</h3>
 
-                                    <x-primary-button>
-                                        {{ __('Save Settings') }}
-                                    </x-primary-button>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <x-input-label for="fidelity_points_required" :value="__('Puncte necesare pentru o programare gratuită')" />
+                                    <x-text-input id="fidelity_points_required" class="block mt-1 w-full" type="number" name="fidelity_points_required" :value="$settings['fidelity_points_required'] ?? '7'" />
+                                    <p class="text-xs text-gray-500 mt-1">Când un client acumulează acest număr de puncte, va primi automat un voucher de 100% reducere.</p>
                                 </div>
                             </div>
-                        </form>
+
+                            <div class="flex items-center justify-end mt-4">
+                                <x-primary-button>
+                                    {{ __('Save Settings') }}
+                                </x-primary-button>
+                            </div>
+                        </div>
+                    </form>
 
                         <div class="mt-12 pt-8 border-t">
                             <h3 class="text-lg font-bold border-b pb-2 mb-6">Licențiere</h3>

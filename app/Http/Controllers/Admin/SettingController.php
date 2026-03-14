@@ -21,6 +21,7 @@ class SettingController extends Controller
             'business_phone' => 'nullable|string',
             'booking_window_start' => 'nullable|integer',
             'booking_window_end' => 'nullable|integer',
+            'fidelity_points_required' => 'nullable|integer|min:1',
             'license_key' => 'nullable|string',
             'license_kill_token' => 'nullable|string',
         ]);
