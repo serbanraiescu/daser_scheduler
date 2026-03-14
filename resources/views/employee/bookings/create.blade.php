@@ -170,7 +170,7 @@
                     this.clientName = client.name;
                     this.clientPhone = client.phone;
                     this.clientEmail = client.email || '';
-                    this.searchQuery = '';
+                    this.searchQuery = client.name; // Keep the name in search bar
                     this.results = [];
                     this.queryTyped = false;
                     
