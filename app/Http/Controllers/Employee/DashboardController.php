@@ -79,6 +79,8 @@ class DashboardController extends Controller
         ]);
 
         return redirect()->route('employee.dashboard')->with('success', 'Programarea a fost adăugată cu succes.');
+    }
+
     public function searchClients(Request $request)
     {
         $query = $request->input('q');
