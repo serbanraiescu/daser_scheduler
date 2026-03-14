@@ -93,6 +93,7 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         // Manual Bookings
         Route::get('/bookings/create', [\App\Http\Controllers\Employee\DashboardController::class, 'create'])->name('bookings.create');
         Route::post('/bookings', [\App\Http\Controllers\Employee\DashboardController::class, 'store'])->name('bookings.store');
+        Route::get('/api/clients/search', [\App\Http\Controllers\Employee\DashboardController::class, 'searchClients'])->name('api.clients.search');
         
         // Agenda Calendar
         Route::get('/calendar', [\App\Http\Controllers\Employee\CalendarController::class, 'index'])->name('calendar.index');

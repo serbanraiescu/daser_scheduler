@@ -34,15 +34,34 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.sidebar')
 
-            <div :class="{'sm:ml-64': {{ auth()->user()->isAdmin() ? 'true' : 'false' }}}">
-                @include('layouts.navigation')
+            <div class="sm:ml-64 flex flex-col min-h-screen">
+                <!-- Desktop Navigation -->
+                <div class="hidden sm:block">
+                    @include('layouts.navigation')
+                </div>
+
+                <!-- Minimal Mobile Header -->
+                <div class="sm:hidden bg-white shadow-sm flex items-center justify-between px-4 h-16 sticky top-0 z-30">
+                    <div class="flex items-center gap-3">
+                        <button @click="sidebarOpen = true" class="text-gray-500 hover:text-gray-700 focus:outline-none p-1 -ml-1">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        </button>
+                        <span class="font-bold text-gray-900 border-l border-gray-200 pl-3">Daser Scheduler</span>
+                    </div>
+                    @if(auth()->user()->isEmployee())
+                        <a href="{{ route('employee.bookings.create') }}" class="text-indigo-600 bg-indigo-50 p-2 rounded-lg font-bold">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        </a>
+                    @endif
+                </div>
+
                 @if(auth()->user()->isAdmin())
                     <x-license-alerts />
                 @endif
 
-                <!-- Page Heading -->
+                <!-- Page Heading (Desktop only, hidden on mobile to save space) -->
                 @isset($header)
-                    <header class="bg-white shadow">
+                    <header class="bg-white shadow hidden sm:block">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             {{ $header }}
                         </div>
@@ -50,7 +69,7 @@
                 @endisset
 
                 <!-- Page Content -->
-                <main>
+                <main class="flex-1">
                     {{ $slot }}
                 </main>
             </div>

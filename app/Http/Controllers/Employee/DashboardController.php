@@ -79,5 +79,19 @@ class DashboardController extends Controller
         ]);
 
         return redirect()->route('employee.dashboard')->with('success', 'Programarea a fost adăugată cu succes.');
+    public function searchClients(Request $request)
+    {
+        $query = $request->input('q');
+        
+        if (!$query || strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $clients = \App\Models\Client::where('name', 'like', "%{$query}%")
+            ->orWhere('phone', 'like', "%{$query}%")
+            ->limit(5)
+            ->get(['name', 'phone']);
+
+        return response()->json($clients);
     }
 }
