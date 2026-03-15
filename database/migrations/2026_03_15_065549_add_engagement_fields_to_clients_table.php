@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->date('birth_date')->nullable()->after('email');
-            $table->integer('no_show_count')->default(0)->after('birth_date');
+            $table->integer('no_show_count')->default(0)->after('notes');
             $table->timestamp('last_reactivation_sent_at')->nullable()->after('fidelity_card_number');
         });
     }
@@ -24,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn(['birth_date', 'no_show_count', 'last_reactivation_sent_at']);
+            $table->dropColumn(['no_show_count', 'last_reactivation_sent_at']);
         });
     }
 };
