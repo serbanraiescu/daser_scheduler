@@ -117,6 +117,20 @@
             </div>
         </div>
 
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+            @auth
+                <a href="{{ route('client.history') }}" class="w-full sm:w-auto px-8 h-14 flex items-center justify-center gap-3 bg-white border-2 border-gray-100 text-gray-900 rounded-2xl font-black text-sm hover:border-primary hover:text-primary transition active:scale-95 shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    ÎNAPOI LA CONTUL MEU
+                </a>
+            @endauth
+            
+            <a href="{{ route('home') }}" class="w-full sm:w-auto px-8 h-14 flex items-center justify-center gap-3 bg-white border-2 border-gray-100 text-gray-900 rounded-2xl font-black text-sm hover:border-primary hover:text-primary transition active:scale-95 shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                ÎNAPOI PE SITE
+            </a>
+        </div>
+
         <div class="text-center pt-8 pb-12">
             <a href="{{ route('bookings.index') }}" class="inline-flex items-center gap-2 text-sm font-black text-gray-400 hover:text-primary transition-colors group">
                 <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7 7-7"/></svg>
