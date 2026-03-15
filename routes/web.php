@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::post('clients/import', [\App\Http\Controllers\Admin\ClientController::class, 'import'])->name('clients.import');
         Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);
         Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
+        Route::resource('gift-vouchers', \App\Http\Controllers\Admin\GiftVoucherController::class);
 
         // Website CMS Routes
         Route::get('/website', [\App\Http\Controllers\Admin\WebsiteController::class, 'index'])->name('website.index');
