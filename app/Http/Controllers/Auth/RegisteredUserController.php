@@ -44,10 +44,16 @@ class RegisteredUserController extends Controller
             'role' => 'client',
         ]);
 
-        // Link to existing client record if found
+        // Link to existing client record if found, or create new one
         $client = Client::where('email', $request->email)->first();
         if ($client) {
             $client->update(['user_id' => $user->id]);
+        } else {
+            Client::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'user_id' => $user->id,
+            ]);
         }
 
         event(new Registered($user));
