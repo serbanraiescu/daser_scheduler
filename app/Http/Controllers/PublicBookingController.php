@@ -19,6 +19,11 @@ class PublicBookingController extends Controller
 {
     public function index()
     {
+        // Proactive sync for logged in user
+        if (auth()->check()) {
+            Client::syncOrphanBookings(auth()->user());
+        }
+
         $settings = \App\Models\WebsiteSetting::first();
         return view('bookings.index', compact('settings'));
     }
@@ -291,10 +296,37 @@ class PublicBookingController extends Controller
         }
 
         // 3. Find/Create Client
-        $client = Client::firstOrCreate(
-            ['phone' => $validated['phone']],
-            ['name' => $validated['name'], 'email' => $validated['email'] ?? null]
-        );
+        if (auth()->check()) {
+            $user = auth()->user();
+            $client = $user->client;
+            
+            if (!$client) {
+                // Check if a client with this phone already exists and link it, or create new
+                $client = Client::where('phone', $validated['phone'])->first();
+                if ($client) {
+                    $client->update(['user_id' => $user->id]);
+                } else {
+                    $client = Client::create([
+                        'user_id' => $user->id,
+                        'name' => $validated['name'],
+                        'phone' => $validated['phone'],
+                        'email' => $validated['email'] ?? $user->email,
+                    ]);
+                }
+            } else {
+                // Update client details if they changed in the form
+                $client->update([
+                    'name' => $validated['name'],
+                    'phone' => $validated['phone'],
+                    'email' => $validated['email'] ?? $client->email,
+                ]);
+            }
+        } else {
+            $client = Client::firstOrCreate(
+                ['phone' => $validated['phone']],
+                ['name' => $validated['name'], 'email' => $validated['email'] ?? null]
+            );
+        }
 
         // 4. Voucher & Gift Voucher Logic
         $notes = null;

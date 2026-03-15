@@ -36,6 +36,7 @@ class DashboardController extends Controller
 
     public function history()
     {
+        Client::syncOrphanBookings(auth()->user());
         $client = auth()->user()->client;
 
         if (!$client) {
@@ -61,6 +62,7 @@ class DashboardController extends Controller
 
     public function vouchers()
     {
+        Client::syncOrphanBookings(auth()->user());
         $client = auth()->user()->client;
 
         if (!$client) {

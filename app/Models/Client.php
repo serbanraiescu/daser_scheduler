@@ -25,15 +25,23 @@ class Client extends Model
     protected static function booted()
     {
         static::saved(function ($client) {
-            if ($client->email && !$client->user_id) {
-                // Check if user already exists
-                $user = User::where('email', $client->email)->first();
+            if (!$client->user_id) {
+                // Check if user already exists by email or phone
+                $user = null;
+                if ($client->email) {
+                    $user = User::where('email', $client->email)->first();
+                }
                 
-                if (!$user) {
-                    $password = Str::random(8); // Generăm o parolă sigură
+                if (!$user && $client->phone) {
+                    $user = User::where('phone', $client->phone)->first();
+                }
+                
+                if (!$user && $client->email) {
+                    $password = Str::random(8);
                     $user = User::create([
                         'name' => $client->name,
                         'email' => $client->email,
+                        'phone' => $client->phone,
                         'password' => Hash::make($password),
                         'role' => 'client',
                     ]);
@@ -42,9 +50,11 @@ class Client extends Model
                     $user->notify(new ClientAccountCreated($password));
                 }
                 
-                // Legăm contul de user de fișa clientului, fără a declanșa din nou evenimentele
-                $client->user_id = $user->id;
-                $client->saveQuietly();
+                if ($user) {
+                    // Legăm contul de user de fișa clientului
+                    $client->user_id = $user->id;
+                    $client->saveQuietly();
+                }
             }
         });
     }
@@ -72,5 +82,34 @@ class Client extends Model
     public function subscriptions()
     {
         return $this->hasMany(ClientSubscription::class);
+    }
+
+    public static function syncOrphanBookings(User $user)
+    {
+        $client = $user->client;
+        
+        $orphanClient = self::whereNull('user_id')
+            ->where(function($query) use ($user) {
+                if ($user->email) {
+                    $query->where('email', $user->email);
+                }
+                if ($user->phone) {
+                    $query->orWhere('phone', $user->phone);
+                }
+            })
+            ->first();
+
+        if ($orphanClient) {
+            if ($client) {
+                // Merge: Move bookings from orphan to the main client record
+                foreach ($orphanClient->bookings as $booking) {
+                    $booking->update(['client_id' => $client->id]);
+                }
+                $orphanClient->delete();
+            } else {
+                // Just link it
+                $orphanClient->update(['user_id' => $user->id]);
+            }
+        }
     }
 }
