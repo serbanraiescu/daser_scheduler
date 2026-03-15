@@ -135,6 +135,8 @@
                     </template>
                 </div>
             </div>
+        </div>
+
         <!-- Step 4: Client Details -->
         <div x-show="currentStep === 4" x-transition:enter="transition ease-out duration-300">
             <div class="flex items-center justify-between mb-8">
