@@ -1,8 +1,10 @@
+<x-guest-layout>
     <div class="mb-8 text-center">
         <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Creează un cont</h1>
         <p class="text-gray-500 mt-2">Alătură-te comunității noastre și gestionează-ți programările simplu</p>
     </div>
 
+    <!-- Rest of the form -->
     <form method="POST" action="{{ route('register') }}" class="space-y-6">
         @csrf
 
@@ -90,3 +92,4 @@
             </p>
         </div>
     </form>
+</x-guest-layout>

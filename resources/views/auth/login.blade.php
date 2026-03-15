@@ -42,6 +42,8 @@
                 <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer group-hover:border-indigo-400" name="remember">
                 <span class="ms-2 text-sm text-gray-500 group-hover:text-gray-700 transition-colors">{{ __('Ține-mă minte') }}</span>
             </label>
+
+            <x-primary-button class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-95 border-none">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
