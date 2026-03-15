@@ -135,15 +135,22 @@
                     </template>
                 </div>
             </div>
-        </div>
-
         <!-- Step 4: Client Details -->
         <div x-show="currentStep === 4" x-transition:enter="transition ease-out duration-300">
-            <div class="flex items-center mb-8">
-                <button @click="currentStep = 3" class="p-2 -ml-2 text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <h2 class="text-2xl font-black text-gray-900 ml-2">Datele tale</h2>
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center">
+                    <button @click="currentStep = 3" class="p-2 -ml-2 text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <h2 class="text-2xl font-black text-gray-900 ml-2">Datele tale</h2>
+                </div>
+                
+                @guest
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="text-xs font-black text-primary uppercase tracking-widest hover:underline flex items-center gap-2 bg-primary/5 px-4 py-2 rounded-xl">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                        Autentifică-te
+                    </a>
+                @endguest
             </div>
 
             <!-- Booking Summary Card -->
@@ -174,6 +181,17 @@
                     </div>
                 </div>
             </div>
+
+            @guest
+                <div class="mb-8 p-4 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm flex-shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <p class="text-sm font-bold text-indigo-900">
+                        Ai deja cont? <a href="{{ route('login') }}" class="text-primary underline">Autentifică-te</a> pentru a beneficia de puncte de fidelitate și discount-uri!
+                    </p>
+                </div>
+            @endguest
 
             <div class="space-y-6">
                 <div>
@@ -225,8 +243,6 @@
         <!-- Sticky Bottom Button -->
         <div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 p-4 z-50 lg:relative lg:bg-transparent lg:border-0 lg:p-0">
             <div class="max-w-3xl mx-auto flex gap-4">
-                <!-- Back Button for Desktop (optional) -->
-                
                 <button x-show="canContinue"
                         @click="handleContinue"
                         :disabled="isSubmitting"
@@ -268,9 +284,9 @@
                     selectedSlot: null,
                     selectedEmployee: null,
                     
-                    clientName: '',
-                    clientPhone: '',
-                    clientEmail: '',
+                    clientName: '{{ auth()->check() ? auth()->user()->name : '' }}',
+                    clientPhone: '{{ auth()->check() ? (auth()->user()->client->phone ?? '') : '' }}',
+                    clientEmail: '{{ auth()->check() ? auth()->user()->email : '' }}',
                     
                     isLoadingSlots: false,
                     isSubmitting: false,
