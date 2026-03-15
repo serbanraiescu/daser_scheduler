@@ -39,7 +39,7 @@ class ProfileController extends Controller
                 'name' => $request->user()->name,
                 'email' => $request->user()->email,
                 'phone' => $request->user()->phone,
-                'birth_date' => $request->validated('birth_date'),
+                'birth_date' => $request->birth_date,
             ]);
         }
 
