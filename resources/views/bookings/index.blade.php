@@ -287,7 +287,7 @@
                     selectedEmployee: null,
                     
                     clientName: '{{ auth()->check() ? auth()->user()->name : '' }}',
-                    clientPhone: '{{ auth()->check() ? (auth()->user()->client->phone ?? '') : '' }}',
+                    clientPhone: '{{ auth()->check() ? (auth()->user()->phone ?: (auth()->user()->client->phone ?? '')) : '' }}',
                     clientEmail: '{{ auth()->check() ? auth()->user()->email : '' }}',
                     
                     isLoadingSlots: false,
