@@ -162,7 +162,14 @@
             @endif
 
             @if(auth()->user()->isClient())
-                <!-- Client Navigation (No Dashboard) -->
+                <!-- Client Navigation -->
+                <li>
+                    <a href="{{ route('client.dashboard') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('client.dashboard') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('client.dashboard') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span class="ms-3">Tablou de Bord</span>
+                    </a>
+                </li>
                 <li>
                     <a href="{{ route('client.history') }}" 
                        class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('client.history') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
@@ -175,6 +182,13 @@
                        class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('client.vouchers') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
                         <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('client.vouchers') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2"/><path d="M15 11v2"/><path d="M15 17v2"/><path d="M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7a2 2 0 0 1 2-2Z"/></svg>
                         <span class="ms-3">Voucherele Mele</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('profile.edit') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('profile.edit') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('profile.edit') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span class="ms-3">Profilul Meu</span>
                     </a>
                 </li>
                 <li class="pt-4 mt-4 border-t border-gray-800">
