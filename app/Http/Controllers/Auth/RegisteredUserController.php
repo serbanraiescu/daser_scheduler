@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -47,11 +48,15 @@ class RegisteredUserController extends Controller
         // Link to existing client record if found, or create new one
         $client = Client::where('email', $request->email)->first();
         if ($client) {
-            $client->update(['user_id' => $user->id]);
+            $client->update([
+                'user_id' => $user->id,
+                'phone' => $request->phone // Update phone if different
+            ]);
         } else {
             Client::create([
                 'name' => $user->name,
                 'email' => $user->email,
+                'phone' => $request->phone,
                 'user_id' => $user->id,
             ]);
         }
