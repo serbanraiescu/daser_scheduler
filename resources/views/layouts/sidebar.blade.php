@@ -7,11 +7,11 @@
         <div class="flex items-center ps-2.5 mb-8">
             @php $settings = \App\Models\WebsiteSetting::first(); @endphp
             @if($settings && $settings->logo_url)
-                <img src="{{ $settings->logo_url }}" alt="Logo" class="h-8 me-3">
+                <img src="{{ $settings->logo_url }}" alt="Logo" class="h-8 w-auto">
             @else
                 <x-application-logo class="h-8 me-3 fill-current text-indigo-500" />
+                <span class="self-center text-xl font-bold whitespace-nowrap text-white">{{ $settings->business_name ?? 'Daser Scheduler' }}</span>
             @endif
-            <span class="self-center text-xl font-bold whitespace-nowrap text-white">{{ $settings->business_name ?? 'Daser Scheduler' }}</span>
         </div>
         
         <ul class="space-y-2 font-medium">
