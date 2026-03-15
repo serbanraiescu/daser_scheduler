@@ -6,12 +6,42 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            
             @if(session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                     {{ session('success') }}
                 </div>
             @endif
+
+            @if($errors->any())
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <!-- CRITICAL: Database Migration Tool at the top for emergency access -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-2 border-red-200">
+                <div class="p-6 bg-red-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h4 class="font-bold text-red-900 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            Actualizare Bază de Date (Eroare 500 Fix)
+                        </h4>
+                        <p class="text-sm text-red-700 mt-1">Dacă ai primit erori sau pagina nu se încărca complet, rulează acest utilitar pentru a crea tabelele noi.</p>
+                    </div>
+                    <form action="{{ route('admin.settings.migrate') }}" method="POST" onsubmit="return confirm('Ești sigur că vrei să actualizezi baza de date?')">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-red-600 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 transition">
+                            Actualizează Acum
+                        </button>
+                    </form>
+                </div>
+            </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
@@ -174,10 +204,9 @@
                                     <div class="text-sm font-medium text-gray-500 uppercase">Status Licență</div>
                                     <div class="mt-1 flex items-center">
                                         @php
-                                            $licenseData = app(\App\Services\LicenseService::class)->getStatus();
-                                            $statusColor = $licenseData->status === 'active' ? 'text-green-600' : 'text-red-600';
+                                            $statusColor = ($licenseData->status ?? 'unknown') === 'active' ? 'text-green-600' : 'text-red-600';
                                         @endphp
-                                        <span class="text-xl font-bold {{ $statusColor }}">{{ ucfirst($licenseData->status) }}</span>
+                                        <span class="text-xl font-bold {{ $statusColor }}">{{ ucfirst($licenseData->status ?? 'Unknown') }}</span>
                                         @if($licenseData->days_left)
                                             <span class="ml-2 text-sm text-gray-500">({{ $licenseData->days_left }} zile rămase)</span>
                                         @endif
@@ -192,22 +221,8 @@
                                         Re-verifică Licența
                                     </button>
                                 </form>
-                            </div>
-
-                            <div class="mt-12 pt-8 border-t">
-                                <h3 class="text-lg font-bold border-b pb-2 mb-6 text-red-600">Sistem & Mentenanță</h3>
-                                <div class="p-6 bg-red-50 rounded-xl border border-red-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                    <div>
-                                        <h4 class="font-bold text-red-900">Actualizare Bază de Date</h4>
-                                        <p class="text-sm text-red-700 mt-1">Dacă ai făcut update la aplicație și lipsesc tabele sau coloane, rulează acest utilitar.</p>
-                                    </div>
-                                    <form action="{{ route('admin.settings.migrate') }}" method="POST" onsubmit="return confirm('Ești sigur că vrei să actualizezi baza de date?')">
-                                        @csrf
-                                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-red-600 border border-transparent rounded-lg font-bold text-sm text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150">
-                                            Actualizează Tabelele
-                                        </button>
-                                    </form>
-                                </div>
+                                                   <div class="mt-12 pt-8 border-t text-center text-xs text-gray-400">
+                                Versiune Sistem: 2.1.0-retention | Build: 2026.03.15
                             </div>
                         </div>
                     </div>

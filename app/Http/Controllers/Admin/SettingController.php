@@ -10,7 +10,21 @@ class SettingController extends Controller
     public function index()
     {
         $settings = \App\Models\Setting::all()->pluck('value', 'key');
-        return view('admin.settings.index', compact('settings'));
+        
+        $licenseData = (object) [
+            'status' => 'unknown',
+            'days_left' => 0,
+            'last_check' => 'Pending update...',
+            'key' => $settings['license_key'] ?? ''
+        ];
+
+        try {
+            $licenseData = app(\App\Services\LicenseService::class)->getStatus();
+        } catch (\Exception $e) {
+            \Log::error('Settings License Load Error: ' . $e->getMessage());
+        }
+
+        return view('admin.settings.index', compact('settings', 'licenseData'));
     }
 
     public function update(Request $request)
