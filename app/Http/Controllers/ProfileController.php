@@ -34,14 +34,25 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        if ($request->user()->client) {
-            $request->user()->client->update([
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
-                'phone' => $request->user()->phone,
-                'birth_date' => $request->birth_date,
-            ]);
+        // Robust Client Sync
+        $client = $request->user()->client;
+        if (!$client) {
+            // Try to find one by phone or email that isn't linked
+            $client = \App\Models\Client::where(function($q) use ($request) {
+                    $q->where('email', $request->user()->email);
+                    if ($request->user()->phone) $q->orWhere('phone', $request->user()->phone);
+                })
+                ->whereNull('user_id')
+                ->first() ?: new \App\Models\Client(['user_id' => $request->user()->id]);
         }
+
+        $client->update([
+            'name' => $request->user()->name,
+            'email' => $request->user()->email,
+            'phone' => $request->user()->phone,
+            'birth_date' => $request->birth_date,
+            'user_id' => $request->user()->id, 
+        ]);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
