@@ -9,6 +9,9 @@
 
     <form method="POST" action="{{ route('login') }}" class="space-y-6">
         @csrf
+        @if(request()->has('redirect'))
+            <input type="hidden" name="redirect" value="{{ request()->query('redirect') }}">
+        @endif
 
         <!-- Email Address -->
         <div>
@@ -48,4 +51,13 @@
             </x-primary-button>
         </div>
     </form>
+
+    <div class="text-center pt-8 mt-8 border-t border-gray-100">
+        <p class="text-sm text-gray-500">
+            Nu ai un cont? 
+            <a href="{{ route('register', ['redirect' => request()->query('redirect')]) }}" class="text-indigo-600 hover:text-indigo-800 font-bold ml-1 transition-colors">
+                Înregistrează-te acum
+            </a>
+        </p>
+    </div>
 </x-guest-layout>

@@ -7,6 +7,9 @@
     <!-- Rest of the form -->
     <form method="POST" action="{{ route('register') }}" class="space-y-6">
         @csrf
+        @if(request()->has('redirect'))
+            <input type="hidden" name="redirect" value="{{ request()->query('redirect') }}">
+        @endif
 
         <!-- Name -->
         <div>
@@ -86,7 +89,7 @@
         <div class="text-center pt-4 mt-6 border-t border-white/40">
             <p class="text-sm text-gray-500">
                 Aveți deja un cont? 
-                <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-800 font-bold ml-1 transition-colors">
+                <a href="{{ route('login', ['redirect' => request()->query('redirect')]) }}" class="text-indigo-600 hover:text-indigo-800 font-bold ml-1 transition-colors">
                     Autentificați-vă
                 </a>
             </p>
