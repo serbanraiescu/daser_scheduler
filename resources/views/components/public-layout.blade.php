@@ -144,7 +144,18 @@
     </main>
 
     <!-- Mobile Sticky CTA -->
-    <div class="lg:hidden fixed bottom-6 left-4 right-4 z-[40]">
+    <div 
+        x-data="{ showCTA: false }" 
+        @scroll.window="showCTA = (window.pageYOffset > 600)"
+        x-show="showCTA"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
+        class="lg:hidden fixed bottom-6 left-4 right-4 z-[40]"
+    >
         <a href="{{ route('bookings.index') }}" class="flex items-center justify-center w-full h-16 bg-[var(--primary-color)] text-white text-lg font-black rounded-2xl shadow-2xl shadow-[var(--primary-color)]/30 active:scale-95 transition-all">
             <span>PROGRAMEAZĂ-TE ACUM</span>
             <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
