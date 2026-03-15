@@ -112,7 +112,9 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
 
     // Client Routes
     Route::middleware(['role:client'])->prefix('account')->name('client.')->group(function () {
-        Route::get('/dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', function() {
+            return redirect()->route('client.history');
+        })->name('dashboard');
         Route::get('/history', [\App\Http\Controllers\Client\DashboardController::class, 'history'])->name('history');
         Route::get('/vouchers', [\App\Http\Controllers\Client\DashboardController::class, 'vouchers'])->name('vouchers');
     });

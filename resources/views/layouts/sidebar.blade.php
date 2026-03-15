@@ -155,6 +155,31 @@
                 </li>
                 @endisset
             @endif
+
+            @if(auth()->user()->isClient())
+                <!-- Client Navigation (No Dashboard) -->
+                <li>
+                    <a href="{{ route('client.history') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('client.history') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('client.history') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6.5"/><path d="M6.2 5.2a2 2 0 0 0-1.2 1.8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-1.2-1.8L12 3L6.2 5.2Z"/><path d="M12 11V7"/></svg>
+                        <span class="ms-3">Istoric Programări</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('client.vouchers') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('client.vouchers') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('client.vouchers') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2"/><path d="M15 11v2"/><path d="M15 17v2"/><path d="M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7a2 2 0 0 1 2-2Z"/></svg>
+                        <span class="ms-3">Voucherele Mele</span>
+                    </a>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-800">
+                    <a href="{{ route('bookings.index') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-white hover:bg-indigo-600 transition-all group">
+                        <svg class="w-5 h-5 text-indigo-400 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
+                        <span class="ms-3 font-bold">Programează-te Acum</span>
+                    </a>
+                </li>
+            @endif
         </ul>
 
         <div class="absolute bottom-4 left-0 w-full px-6">

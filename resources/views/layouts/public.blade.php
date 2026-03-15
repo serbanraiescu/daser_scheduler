@@ -44,6 +44,7 @@
                     @foreach($pagesHeader as $headerPage)
                         <a href="{{ url('/page/' . $headerPage->slug) }}" class="text-sm font-medium text-gray-600 hover:text-[var(--primary-color)] transition">{{ $headerPage->title }}</a>
                     @endforeach
+                    <a href="{{ route('login') }}" class="text-sm font-medium text-gray-600 hover:text-[var(--primary-color)] transition">Cont Client</a>
                     <a href="{{ route('bookings.index') }}" class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-bold rounded-full text-white bg-[var(--primary-color)] hover:opacity-90 transition shadow-lg shadow-[var(--primary-color)]/25">
                         Programează-te
                     </a>
@@ -51,6 +52,11 @@
 
                 <!-- Mobile menu button -->
                 <div class="flex items-center md:hidden" x-data="{ open: false }">
+                    <a href="{{ route('login') }}" class="mr-4 text-gray-500 hover:text-gray-600" title="Autentificare">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </a>
                     <button @click="open = !open" class="text-gray-500 hover:text-gray-600">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -61,6 +67,7 @@
                         @foreach($pagesHeader as $headerPage)
                             <a href="{{ url('/page/' . $headerPage->slug) }}" class="block text-base font-semibold text-gray-900">{{ $headerPage->title }}</a>
                         @endforeach
+                        <a href="{{ route('login') }}" class="block text-base font-semibold text-gray-900">Cont Client</a>
                         <a href="{{ route('bookings.index') }}" class="block text-center px-6 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-[var(--primary-color)]">
                             Programează-te
                         </a>

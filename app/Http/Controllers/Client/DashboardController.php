@@ -42,12 +42,21 @@ class DashboardController extends Controller
             return view('client.no-history');
         }
 
+        $upcomingBooking = $client->bookings()
+            ->where('date', '>=', now()->toDateString())
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('date')
+            ->orderBy('start_time')
+            ->first();
+
         $bookings = $client->bookings()
             ->orderBy('date', 'desc')
             ->orderBy('start_time', 'desc')
-            ->paginate(20);
+            ->paginate(15);
+            
+        $voucherCount = $client->vouchers()->where('used', false)->count();
 
-        return view('client.history', compact('bookings'));
+        return view('client.history', compact('bookings', 'client', 'upcomingBooking', 'voucherCount'));
     }
 
     public function vouchers()
@@ -58,8 +67,16 @@ class DashboardController extends Controller
             return view('client.no-history');
         }
 
-        $vouchers = $client->vouchers()->with('voucher')->paginate(20);
+        $upcomingBooking = $client->bookings()
+            ->where('date', '>=', now()->toDateString())
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('date')
+            ->orderBy('start_time')
+            ->first();
 
-        return view('client.vouchers', compact('vouchers', 'client'));
+        $vouchers = $client->vouchers()->with('voucher')->paginate(20);
+        $voucherCount = $client->vouchers()->where('used', false)->count();
+
+        return view('client.vouchers', compact('vouchers', 'client', 'upcomingBooking', 'voucherCount'));
     }
 }
