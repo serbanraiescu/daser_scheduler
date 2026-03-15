@@ -45,7 +45,28 @@
                 <div class="flex items-center">
                     <a href="{{ url('/') }}" class="flex items-center group">
                         @if($settings->logo_url)
-                            <img src="{{ $settings->logo_url }}" alt="{{ $settings->business_name }}" class="h-10 w-auto">
+                            {{-- Show Alt Logo when scrolled, Primary Logo when at top --}}
+                            <img 
+                                src="{{ $settings->logo_url }}" 
+                                x-show="!scrolled"
+                                alt="{{ $settings->business_name }}" 
+                                class="h-10 w-auto"
+                            >
+                            @if($settings->logo_alt_url)
+                                <img 
+                                    src="{{ $settings->logo_alt_url }}" 
+                                    x-show="scrolled"
+                                    alt="{{ $settings->business_name }}" 
+                                    class="h-10 w-auto"
+                                >
+                            @else
+                                <img 
+                                    src="{{ $settings->logo_url }}" 
+                                    x-show="scrolled"
+                                    alt="{{ $settings->business_name }}" 
+                                    class="h-10 w-auto brightness-0"
+                                >
+                            @endif
                         @else
                             <div class="w-10 h-10 bg-[var(--primary-color)] rounded-xl flex items-center justify-center mr-3 group-hover:rotate-6 transition-transform">
                                 <span class="text-white font-black text-xl">{{ substr($settings->business_name ?? 'D', 0, 1) }}</span>

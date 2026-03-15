@@ -40,7 +40,14 @@
             <div class="mb-4 transform hover:scale-105 transition-transform duration-300">
                 <a href="/">
                     <div class="p-3 glass rounded-2xl shadow-xl">
-                        <x-application-logo class="w-16 h-16 fill-current text-indigo-600" />
+                        @php $settings = \App\Models\WebsiteSetting::first(); @endphp
+                        @if($settings && $settings->logo_alt_url)
+                            <img src="{{ $settings->logo_alt_url }}" alt="{{ $settings->business_name }}" class="h-12 w-auto">
+                        @elseif($settings && $settings->logo_url)
+                            <img src="{{ $settings->logo_url }}" alt="{{ $settings->business_name }}" class="h-12 w-auto">
+                        @else
+                            <x-application-logo class="w-16 h-16 fill-current text-indigo-600" />
+                        @endif
                     </div>
                 </a>
             </div>

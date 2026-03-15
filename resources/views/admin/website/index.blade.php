@@ -56,11 +56,19 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="logo" :value="__('Logo (PNG/SVG)')" />
+                                    <x-input-label for="logo" :value="__('Logo Principal (pentru fundal închis)')" />
                                     @if($settings->logo_url)
-                                        <img src="{{ $settings->logo_url }}" alt="Logo" class="h-12 mb-2 bg-gray-100 p-2 rounded">
+                                        <img src="{{ $settings->logo_url }}" alt="Logo" class="h-12 mb-2 bg-gray-900 p-2 rounded">
                                     @endif
                                     <input type="file" name="logo" id="logo" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="logo_alt" :value="__('Logo Alternativ (pentru fundal deschis/dashboard)')" />
+                                    @if($settings->logo_alt_url)
+                                        <img src="{{ $settings->logo_alt_url }}" alt="Logo Alt" class="h-12 mb-2 bg-gray-100 p-2 rounded">
+                                    @endif
+                                    <input type="file" name="logo_alt" id="logo_alt" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
                                 </div>
                             </div>
 

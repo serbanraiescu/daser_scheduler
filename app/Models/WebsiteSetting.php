@@ -9,6 +9,7 @@ class WebsiteSetting extends Model
     protected $fillable = [
         'business_name',
         'logo_url',
+        'logo_alt_url',
         'hero_image',
         'primary_color',
         'secondary_color',

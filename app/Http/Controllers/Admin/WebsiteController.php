@@ -43,7 +43,9 @@ class WebsiteController extends Controller
             'show_contact_section' => 'boolean',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string|max:500',
+            'seo_description' => 'nullable|string|max:500',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_alt' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'hero' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
         ]);
 
@@ -64,6 +66,17 @@ class WebsiteController extends Controller
             $settings->logo_url = asset('uploads/website/' . $filename);
         }
 
+        if ($request->hasFile('logo_alt')) {
+            $file = $request->file('logo_alt');
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $path = public_path('uploads/website');
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
+            $file->move($path, $filename);
+            $settings->logo_alt_url = asset('uploads/website/' . $filename);
+        }
+
         if ($request->hasFile('hero')) {
             $file = $request->file('hero');
             $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
@@ -71,7 +84,7 @@ class WebsiteController extends Controller
             $settings->hero_image = asset('uploads/website/' . $filename);
         }
 
-        $settings->fill($request->except(['logo', 'hero', 'show_services_section', 'show_about_section', 'show_contact_section']));
+        $settings->fill($request->except(['logo', 'logo_alt', 'hero', 'show_services_section', 'show_about_section', 'show_contact_section']));
         $settings->save();
 
         return back()->with('success', 'Website settings updated successfully.');

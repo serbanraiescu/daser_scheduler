@@ -5,8 +5,13 @@
        :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-900 border-r border-gray-800">
         <div class="flex items-center ps-2.5 mb-8">
-            <x-application-logo class="h-8 me-3 fill-current text-indigo-500" />
-            <span class="self-center text-xl font-bold whitespace-nowrap text-white">Daser Scheduler</span>
+            @php $settings = \App\Models\WebsiteSetting::first(); @endphp
+            @if($settings && $settings->logo_url)
+                <img src="{{ $settings->logo_url }}" alt="Logo" class="h-8 me-3">
+            @else
+                <x-application-logo class="h-8 me-3 fill-current text-indigo-500" />
+            @endif
+            <span class="self-center text-xl font-bold whitespace-nowrap text-white">{{ $settings->business_name ?? 'Daser Scheduler' }}</span>
         </div>
         
         <ul class="space-y-2 font-medium">
