@@ -78,11 +78,19 @@
                     
                     <div class="h-6 w-px bg-gray-200/20 ml-4 mr-2" :class="scrolled ? 'bg-gray-200' : 'bg-white/20'"></div>
                     
-                    <a href="{{ route('login') }}" 
-                       :class="scrolled ? 'text-gray-900 border-gray-900' : 'text-white border-white/30 hover:border-white'"
-                       class="text-sm font-bold transition-all px-4 py-2 border-2 rounded-full">
-                        Autentificare
-                    </a>
+                    @auth
+                        <a href="{{ route('dashboard') }}" 
+                           :class="scrolled ? 'text-gray-900 border-gray-900' : 'text-white border-white/30 hover:border-white'"
+                           class="text-sm font-bold transition-all px-4 py-2 border-2 rounded-full">
+                            Contul Meu
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" 
+                           :class="scrolled ? 'text-gray-900 border-gray-900' : 'text-white border-white/30 hover:border-white'"
+                           class="text-sm font-bold transition-all px-4 py-2 border-2 rounded-full">
+                            Autentificare
+                        </a>
+                    @endauth
                     <a href="{{ route('bookings.index') }}" class="inline-flex items-center px-7 py-3 border border-transparent text-sm font-black rounded-full text-white bg-[var(--primary-color)] hover:shadow-2xl hover:shadow-[var(--primary-color)]/30 transition shadow-xl shadow-[var(--primary-color)]/20">
                         RESERVĂ ACUM
                     </a>
@@ -113,6 +121,14 @@
                                 <a href="{{ url('/page/' . $headerPage->slug) }}" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">{{ $headerPage->title }}</a>
                             @endforeach
                         @endif
+
+                        <div class="w-full h-px bg-gray-100 my-4"></div>
+
+                        @auth
+                            <a href="{{ route('dashboard') }}" @click="open = false" class="block text-xl font-bold text-primary py-2">Contul Meu</a>
+                        @else
+                            <a href="{{ route('login') }}" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Autentificare</a>
+                        @endauth
                         <div class="w-full h-px bg-gray-100 my-4"></div>
                         <a href="{{ route('bookings.index') }}" class="w-full text-center px-8 py-4 border border-transparent text-lg font-black rounded-2xl text-white bg-[var(--primary-color)]">
                             PROGRAMEAZĂ-TE
