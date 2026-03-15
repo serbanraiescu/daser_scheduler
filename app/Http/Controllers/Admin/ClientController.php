@@ -70,8 +70,13 @@ class ClientController extends Controller
             ->orderBy('date', 'desc')
             ->orderBy('start_time', 'desc')
             ->paginate(20);
+
+        $giftVouchers = \App\Models\GiftVoucher::where('client_id', $client->id)
+            ->orWhere('buyer_email', $client->email)
+            ->latest()
+            ->get();
             
-        return view('admin.clients.show', compact('client', 'bookings'));
+        return view('admin.clients.show', compact('client', 'bookings', 'giftVouchers'));
     }
 
     public function edit(Client $client)

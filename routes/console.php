@@ -9,3 +9,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('app:send-booking-reminders')->everyFiveMinutes();
+
+Schedule::command('app:send-birthday-vouchers')->dailyAt('09:00');
+Schedule::command('app:run-reactivation-campaign')->dailyAt('10:00');
+Schedule::command('app:check-voucher-expiring')->dailyAt('00:00');

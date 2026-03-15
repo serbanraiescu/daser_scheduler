@@ -65,6 +65,80 @@
                                 </div>
                             </div>
 
+                            <h3 class="text-lg font-bold border-b pb-2 mt-6">Vouchere Aniversare</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <x-input-label for="birthday_voucher_enabled" :value="__('Activat')" />
+                                    <select name="birthday_voucher_enabled" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <option value="1" {{ ($settings['birthday_voucher_enabled'] ?? '0') == '1' ? 'selected' : '' }}>DA</option>
+                                        <option value="0" {{ ($settings['birthday_voucher_enabled'] ?? '0') == '0' ? 'selected' : '' }}>NU</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <x-input-label for="birthday_voucher_percent" :value="__('Reducere (%)')" />
+                                    <x-text-input id="birthday_voucher_percent" class="block mt-1 w-full" type="number" name="birthday_voucher_percent" :value="$settings['birthday_voucher_percent'] ?? '20'" />
+                                </div>
+                                <div>
+                                    <x-input-label for="birthday_voucher_valid_days" :value="__('Valabilitate (Zile)')" />
+                                    <x-text-input id="birthday_voucher_valid_days" class="block mt-1 w-full" type="number" name="birthday_voucher_valid_days" :value="$settings['birthday_voucher_valid_days'] ?? '14'" />
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold border-b pb-2 mt-6">Reactivare Clienți Inactivi</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <x-input-label for="reactivation_enabled" :value="__('Activat')" />
+                                    <select name="reactivation_enabled" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <option value="1" {{ ($settings['reactivation_enabled'] ?? '0') == '1' ? 'selected' : '' }}>DA</option>
+                                        <option value="0" {{ ($settings['reactivation_enabled'] ?? '0') == '0' ? 'selected' : '' }}>NU</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <x-input-label for="reactivation_days_inactive" :value="__('Zile de inactivitate')" />
+                                    <x-text-input id="reactivation_days_inactive" class="block mt-1 w-full" type="number" name="reactivation_days_inactive" :value="$settings['reactivation_days_inactive'] ?? '60'" />
+                                </div>
+                                <div>
+                                    <x-input-label for="reactivation_discount_percent" :value="__('Reducere (%)')" />
+                                    <x-text-input id="reactivation_discount_percent" class="block mt-1 w-full" type="number" name="reactivation_discount_percent" :value="$settings['reactivation_discount_percent'] ?? '15'" />
+                                </div>
+                                <div>
+                                    <x-input-label for="reactivation_voucher_valid_days" :value="__('Valabilitate Voucher (Zile)')" />
+                                    <x-text-input id="reactivation_voucher_valid_days" class="block mt-1 w-full" type="number" name="reactivation_voucher_valid_days" :value="$settings['reactivation_voucher_valid_days'] ?? '10'" />
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold border-b pb-2 mt-6">Setări Email (SMTP)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <x-input-label for="mail_host" :value="__('SMTP Host')" />
+                                    <x-text-input id="mail_host" class="block mt-1 w-full" type="text" name="mail_host" :value="$settings['mail_host'] ?? ''" placeholder="mail.exemplu.ro" />
+                                </div>
+                                <div>
+                                    <x-input-label for="mail_port" :value="__('SMTP Port')" />
+                                    <x-text-input id="mail_port" class="block mt-1 w-full" type="text" name="mail_port" :value="$settings['mail_port'] ?? '465'" />
+                                </div>
+                                <div>
+                                    <x-input-label for="mail_username" :value="__('Email Username')" />
+                                    <x-text-input id="mail_username" class="block mt-1 w-full" type="text" name="mail_username" :value="$settings['mail_username'] ?? ''" />
+                                </div>
+                                <div>
+                                    <x-input-label for="mail_password" :value="__('Email Password')" />
+                                    <x-text-input id="mail_password" class="block mt-1 w-full" type="password" name="mail_password" :value="$settings['mail_password'] ?? ''" />
+                                </div>
+                                <div>
+                                    <x-input-label for="mail_encryption" :value="__('Encryption')" />
+                                    <select name="mail_encryption" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <option value="ssl" {{ ($settings['mail_encryption'] ?? 'ssl') == 'ssl' ? 'selected' : '' }}>SSL</option>
+                                        <option value="tls" {{ ($settings['mail_encryption'] ?? 'ssl') == 'tls' ? 'selected' : '' }}>TLS</option>
+                                        <option value="none" {{ ($settings['mail_encryption'] ?? 'ssl') == 'none' ? 'selected' : '' }}>None</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <x-input-label for="mail_from_address" :value="__('Email From Address')" />
+                                    <x-text-input id="mail_from_address" class="block mt-1 w-full" type="email" name="mail_from_address" :value="$settings['mail_from_address'] ?? ''" />
+                                </div>
+                            </div>
+
                             <div class="flex items-center justify-end mt-4">
                                 <x-primary-button>
                                     {{ __('Save Settings') }}

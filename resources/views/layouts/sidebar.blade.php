@@ -56,12 +56,12 @@
                     </a>
                 </li>
 
-                <!-- Vouchere -->
+                <!-- Carduri Cadou -->
                 <li>
-                    <a href="{{ route('admin.vouchers.index') }}" 
-                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('admin.vouchers.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
-                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('admin.vouchers.*') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Vouchere</span>
+                    <a href="{{ route('admin.gift-vouchers.index') }}" 
+                       class="flex items-center p-3 text-gray-300 rounded-xl hover:bg-gray-800 hover:text-white transition-all group {{ request()->routeIs('admin.gift-vouchers.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/50' : '' }}">
+                        <svg class="w-5 h-5 transition duration-75 group-hover:text-white {{ request()->routeIs('admin.gift-vouchers.*') ? 'text-white' : 'text-gray-400' }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Carduri Cadou</span>
                     </a>
                 </li>
 

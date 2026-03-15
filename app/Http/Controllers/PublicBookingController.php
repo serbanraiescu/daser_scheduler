@@ -12,6 +12,7 @@ use App\Models\Client;
 use App\Models\EmployeeSchedule;
 use App\Models\BlockedSlot;
 use App\Models\StandardSchedule;
+use App\Models\GiftVoucher;
 use Illuminate\Support\Str;
 
 class PublicBookingController extends Controller
@@ -295,13 +296,55 @@ class PublicBookingController extends Controller
             ['name' => $validated['name'], 'email' => $validated['email'] ?? null]
         );
 
-        // 4. Voucher Logic
+        // 4. Voucher & Gift Voucher Logic
         $notes = null;
+        $giftVoucherId = null;
+
         if (isset($validated['voucher_code']) && $validated['voucher_code']) {
-            $voucher = Voucher::where('code', $validated['voucher_code'])->where('active', true)->first();
+            $code = $validated['voucher_code'];
+            
+            // Check Regular Voucher first
+            $voucher = Voucher::where('code', $code)->where('active', true)->first();
             if ($voucher) {
-                // Basic check for manual entry in notes as requested/implied
                 $notes = "Voucher: " . $voucher->code;
+            } else {
+                // Check Gift Voucher
+                $giftVoucher = GiftVoucher::where('code', $code)->first();
+                if ($giftVoucher && $giftVoucher->isValid()) {
+                    if ($giftVoucher->service_id) {
+                        // Package Based
+                        if ($giftVoucher->service_id == $service->id && $giftVoucher->remaining_uses > 0) {
+                            $giftVoucher->decrement('remaining_uses');
+                            if ($giftVoucher->remaining_uses <= 0) {
+                                $giftVoucher->update(['status' => 'redeemed']);
+                            }
+                            $giftVoucherId = $giftVoucher->id;
+                            $notes = "Plătit cu Pachet: " . $giftVoucher->code;
+                        } else {
+                            return back()->withErrors(['voucher_code' => 'Acest pachet nu este valabil pentru serviciul selectat sau nu mai are ședințe.'])->withInput();
+                        }
+                    } else {
+                        // Value Based
+                        if ($giftVoucher->remaining_value >= $service->price) {
+                            $giftVoucher->decrement('remaining_value', $service->price);
+                            if ($giftVoucher->remaining_value <= 0) {
+                                $giftVoucher->update(['status' => 'redeemed']);
+                            }
+                            $giftVoucherId = $giftVoucher->id;
+                            $notes = "Plătit cu Card Cadou: " . $giftVoucher->code;
+                        } else {
+                            // Partially cover? For simplicity, we require full balance or handle as discount
+                            // Here we just deduct whatever is there
+                            $deduction = min($giftVoucher->remaining_value, $service->price);
+                            $giftVoucher->decrement('remaining_value', $deduction);
+                            if ($giftVoucher->remaining_value <= 0) {
+                                $giftVoucher->update(['status' => 'redeemed']);
+                            }
+                            $giftVoucherId = $giftVoucher->id;
+                            $notes = "Plătit parțial cu Card Cadou ({$deduction} RON): " . $giftVoucher->code;
+                        }
+                    }
+                }
             }
         }
 
@@ -316,6 +359,7 @@ class PublicBookingController extends Controller
             'status' => 'confirmed',
             'manage_token' => Str::random(16),
             'notes' => $notes,
+            'gift_voucher_id' => $giftVoucherId,
         ]);
 
         // 6. Queue Confirmation SMS

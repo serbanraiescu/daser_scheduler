@@ -19,6 +19,9 @@
                     <div>
                         <h3 class="text-lg font-black text-gray-900">{{ $client->name }}</h3>
                         <p class="text-sm text-gray-500">{{ $client->phone }} | {{ $client->email ?? 'Fără email' }}</p>
+                        @if($client->birth_date)
+                            <p class="text-xs text-blue-600 font-bold mt-1">🎂 Zi de naștere: {{ $client->birth_date->format('d.m.Y') }}</p>
+                        @endif
                         @if($client->tags)
                             <div class="mt-2">
                                 @foreach($client->tags as $tag)
@@ -38,6 +41,60 @@
                         <a href="{{ route('admin.clients.edit', $client) }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             Editează Client
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Engagement & Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Engagement Stats -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-4 border-b border-gray-100 bg-gray-50">
+                        <h3 class="font-bold text-gray-700">Engagement & Retenție</h3>
+                    </div>
+                    <div class="p-6 grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                            <p class="text-xs font-bold text-orange-400 uppercase">No-Show (Absențe)</p>
+                            <p class="text-2xl font-black text-orange-600">{{ $client->no_show_count ?? 0 }}</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-xl border border-purple-100">
+                            <p class="text-xs font-bold text-purple-400 uppercase">Last Reactivation</p>
+                            <p class="text-sm font-black text-purple-600">
+                                {{ $client->last_reactivation_sent_at ? $client->last_reactivation_sent_at->format('d.m.Y') : 'Never' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gift Vouchers / Packages -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-4 border-b border-gray-100 bg-gray-50">
+                        <h3 class="font-bold text-gray-700">Carduri Cadou & Pachete Active</h3>
+                    </div>
+                    <div class="p-0">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($giftVouchers->where('status', 'active') as $gv)
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="text-sm font-bold text-gray-900">{{ $gv->code }}</div>
+                                            <div class="text-xs text-gray-500">{{ $gv->service_id ? 'Pachet ' . $gv->service->name : 'Valoare' }}</div>
+                                        </td>
+                                        <td class="px-4 py-3 text-right">
+                                            @if($gv->service_id)
+                                                <span class="text-sm font-black text-blue-600">{{ $gv->remaining_uses }} ședințe</span>
+                                            @else
+                                                <span class="text-sm font-black text-green-600">{{ number_format($gv->remaining_value, 2) }} RON</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td class="px-4 py-6 text-center text-sm text-gray-400 italic">Niciun card cadou activ.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

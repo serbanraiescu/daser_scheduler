@@ -8,7 +8,7 @@ class Booking extends Model
 {
     protected $fillable = [
         'client_id', 'employee_id', 'service_id', 'date', 
-        'start_time', 'end_time', 'status', 'manage_token', 'notes'
+        'start_time', 'end_time', 'status', 'manage_token', 'notes', 'gift_voucher_id'
     ];
 
     protected $casts = [
@@ -16,6 +16,15 @@ class Booking extends Model
         'start_time' => 'datetime',
         'end_time' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::updated(function ($booking) {
+            if ($booking->wasChanged('status') && $booking->status === 'no_show') {
+                $booking->client->increment('no_show_count');
+            }
+        });
+    }
 
     /**
      * Check if a new booking overlaps with existing bookings.
