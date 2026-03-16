@@ -66,16 +66,30 @@ class SettingController extends Controller
     
     public function testEmail(Request $request)
     {
+        $request->validate([
+            'test_email' => 'required|email'
+        ]);
+
         try {
-            $user = auth()->user();
-            $user->notify(new \App\Notifications\GenericNotification(
+            $email = $request->test_email;
+            
+            // Create a temporary "user-like" object to notify
+            $notifiable = new class($email) {
+                use \Illuminate\Notifications\Notifiable;
+                public $email;
+                public function __construct($email) { $this->email = $email; }
+                public function routeNotificationForMail() { return $this->email; }
+                public function getKey() { return $this->email; }
+            };
+
+            $notifiable->notify(new \App\Notifications\GenericNotification(
                 'Email de Test - ' . (\App\Models\Setting::getValue('business_name') ?? config('app.name')),
                 'Felicitări! Dacă primești acest email, înseamnă că setările SMTP au fost configurate corect și sistemul de notificări este activ.',
                 'Vezi Website',
                 url('/')
             ));
             
-            return back()->with('success', 'Email-ul de test a fost trimis către ' . $user->email);
+            return back()->with('success', 'Email-ul de test a fost trimis către ' . $email);
         } catch (\Exception $e) {
             \Log::error('Test Email Error: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Eroare la trimiterea email-ului: ' . $e->getMessage()]);

@@ -169,14 +169,24 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between mt-4">
-                                <div class="flex gap-4">
-                                    <button type="submit" form="test-email-form" class="inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
-                                        {{ __('Trimite Email de Test') }}
+                            <div class="mt-8 pt-6 border-t bg-gray-50/50 p-4 rounded-xl border border-dashed border-gray-200">
+                                <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest mb-4">Verifică Configurația</h4>
+                                <div class="flex flex-col md:flex-row items-end gap-4">
+                                    <div class="flex-1 w-full text-left">
+                                        <x-input-label for="test_email" :value="__('Email de Test (Destinatar)')" class="text-xs uppercase font-bold text-gray-500" />
+                                        <x-text-input id="test_email" form="test-email-form" class="block mt-1 w-full bg-white border-gray-300 shadow-sm" type="email" name="test_email" :value="auth()->user()->email" placeholder="nume@exemplu.com" required />
+                                    </div>
+                                    <button type="submit" form="test-email-form" class="w-full md:w-auto inline-flex items-center justify-center px-6 py-2.5 bg-indigo-600 border border-transparent rounded-lg font-black text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md shadow-indigo-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                        {{ __('Trimite Proba') }}
                                     </button>
                                 </div>
-                                <x-primary-button>
-                                    {{ __('Save Settings') }}
+                                <p class="mt-2 text-[10px] text-gray-400 font-medium italic">* Asigurați-vă că ați salvat setările SMTP de mai sus înainte de a trimite testul.</p>
+                            </div>
+
+                            <div class="flex items-center justify-end mt-8 pt-4 border-t">
+                                <x-primary-button class="px-8 py-3">
+                                    {{ __('Salvează Toate Setările') }}
                                 </x-primary-button>
                             </div>
                         </div>
