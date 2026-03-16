@@ -188,6 +188,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Contact Section -->
     @if($settings->show_contact_section)

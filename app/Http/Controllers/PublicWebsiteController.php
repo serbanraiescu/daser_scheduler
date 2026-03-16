@@ -12,7 +12,13 @@ class PublicWebsiteController extends Controller
 {
     public function index()
     {
-        $settings = WebsiteSetting::first() ?? new WebsiteSetting();
+        try {
+            $settings = WebsiteSetting::first() ?? new WebsiteSetting();
+        } catch (\Exception $e) {
+            \Log::warning('Public Landing Settings Load Error: ' . $e->getMessage());
+            $settings = new WebsiteSetting();
+        }
+
         $services = Service::where('active', true)->get();
         $employees = Employee::with('user')->where('active', true)->get();
         $pagesHeader = Page::where('status', 'published')->where('show_in_header', true)->get();
