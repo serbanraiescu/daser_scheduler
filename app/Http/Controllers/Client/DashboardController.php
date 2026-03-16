@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Client;
 
+// Cod dashboard client
 class DashboardController extends Controller
 {
     public function index()

@@ -63,6 +63,24 @@ class SettingController extends Controller
 
         return back()->with('success', 'Settings updated successfully.');
     }
+    
+    public function testEmail(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $user->notify(new \App\Notifications\GenericNotification(
+                'Email de Test - ' . (\App\Models\Setting::getValue('business_name') ?? config('app.name')),
+                'Felicitări! Dacă primești acest email, înseamnă că setările SMTP au fost configurate corect și sistemul de notificări este activ.',
+                'Vezi Website',
+                url('/')
+            ));
+            
+            return back()->with('success', 'Email-ul de test a fost trimis către ' . $user->email);
+        } catch (\Exception $e) {
+            \Log::error('Test Email Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Eroare la trimiterea email-ului: ' . $e->getMessage()]);
+        }
+    }
 
     public function migrate()
     {

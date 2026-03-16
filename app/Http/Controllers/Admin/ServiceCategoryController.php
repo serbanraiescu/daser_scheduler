@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ServiceCategory;
 
+// Cod administrare categorii servicii
 class ServiceCategoryController extends Controller
 {
     public function index()

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Employee;
 use App\Models\Service;
 
+// Cod administrare angajati
 class EmployeeController extends Controller
 {
     public function index()

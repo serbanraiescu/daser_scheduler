@@ -27,6 +27,26 @@ class WebsiteController extends Controller
             'hero_title' => 'nullable|string|max:255',
             'hero_subtitle' => 'nullable|string|max:500',
             'hero_button_text' => 'nullable|string|max:255',
+            
+            'services_title' => 'nullable|string|max:255',
+            'services_subtitle' => 'nullable|string|max:255',
+            
+            'team_title' => 'nullable|string|max:255',
+            'team_subtitle' => 'nullable|string|max:1000',
+            'team_reservation_text' => 'nullable|string|max:255',
+            
+            'gallery_title' => 'nullable|string|max:255',
+            'gallery_subtitle' => 'nullable|string|max:255',
+            'gallery_zoom_text' => 'nullable|string|max:255',
+            
+            'reviews_title' => 'nullable|string|max:255',
+            
+            'contact_title' => 'nullable|string|max:255',
+            'contact_label_location' => 'nullable|string|max:255',
+            'contact_label_phone' => 'nullable|string|max:255',
+            'contact_button_call_text' => 'nullable|string|max:255',
+            'contact_button_book_text' => 'nullable|string|max:255',
+            
             'about_title' => 'nullable|string|max:255',
             'about_text' => 'nullable|string',
             'address' => 'nullable|string|max:255',
@@ -38,11 +58,21 @@ class WebsiteController extends Controller
             'tiktok_url' => 'nullable|url|max:255',
             'primary_color' => ['nullable', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'secondary_color' => ['nullable', 'string', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            
+            'primary_font' => 'nullable|string|max:255',
+            'secondary_font' => 'nullable|string|max:255',
+            'border_radius' => 'nullable|string|max:255',
+            'section_padding' => 'nullable|string|max:255',
+            'custom_css' => 'nullable|string',
+            
             'show_services_section' => 'boolean',
             'show_about_section' => 'boolean',
             'show_contact_section' => 'boolean',
+            'show_team_section' => 'boolean',
+            'show_gallery_section' => 'boolean',
+            'show_reviews_section' => 'boolean',
+            
             'seo_title' => 'nullable|string|max:255',
-            'seo_description' => 'nullable|string|max:500',
             'seo_description' => 'nullable|string|max:500',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'logo_alt' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -53,6 +83,9 @@ class WebsiteController extends Controller
         $settings->show_services_section = $request->has('show_services_section');
         $settings->show_about_section = $request->has('show_about_section');
         $settings->show_contact_section = $request->has('show_contact_section');
+        $settings->show_team_section = $request->has('show_team_section');
+        $settings->show_gallery_section = $request->has('show_gallery_section');
+        $settings->show_reviews_section = $request->has('show_reviews_section');
 
         // Handle Images
         if ($request->hasFile('logo')) {
@@ -84,7 +117,11 @@ class WebsiteController extends Controller
             $settings->hero_image = asset('uploads/website/' . $filename);
         }
 
-        $settings->fill($request->except(['logo', 'logo_alt', 'hero', 'show_services_section', 'show_about_section', 'show_contact_section']));
+        $settings->fill($request->except([
+            'logo', 'logo_alt', 'hero', 
+            'show_services_section', 'show_about_section', 'show_contact_section',
+            'show_team_section', 'show_gallery_section', 'show_reviews_section'
+        ]));
         $settings->save();
 
         return back()->with('success', 'Website settings updated successfully.');

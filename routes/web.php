@@ -73,6 +73,7 @@ Route::middleware(['auth', 'verified', 'check.license'])->group(function () {
         Route::post('/employees/{user}/impersonate', [\App\Http\Controllers\Admin\ImpersonateController::class, 'start'])->name('employees.impersonate');
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::patch('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+        Route::post('/settings/test-email', [\App\Http\Controllers\Admin\SettingController::class, 'testEmail'])->name('settings.test-email');
         Route::post('/settings/migrate', [\App\Http\Controllers\Admin\SettingController::class, 'migrate'])->name('settings.migrate');
         Route::post('clients/import', [\App\Http\Controllers\Admin\ClientController::class, 'import'])->name('clients.import');
         Route::resource('clients', \App\Http\Controllers\Admin\ClientController::class);

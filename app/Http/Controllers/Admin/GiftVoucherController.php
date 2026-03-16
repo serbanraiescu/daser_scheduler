@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Service;
 use Illuminate\Support\Str;
 
+// Cod administrare carduri cadou
 class GiftVoucherController extends Controller
 {
     public function index()

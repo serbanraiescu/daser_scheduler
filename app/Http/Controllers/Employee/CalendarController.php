@@ -10,6 +10,7 @@ use App\Models\BlockedSlot;
 use App\Models\EmployeeSchedule;
 use App\Models\StandardSchedule;
 
+// Cod calendar
 class CalendarController extends Controller
 {
     public function index()

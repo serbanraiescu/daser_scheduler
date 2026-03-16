@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Voucher;
 
+// Cod administrare vouchere
 class VoucherController extends Controller
 {
     public function index()

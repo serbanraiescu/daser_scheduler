@@ -34,19 +34,29 @@ class ClientAccountCreated extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail($notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->subject('Contul tău a fost creat - Bine ai venit!')
+        $businessName = \App\Models\Setting::getValue('business_name') ?? config('app.name');
+        $websiteSettings = \App\Models\WebsiteSetting::first();
+        $logoUrl = $websiteSettings ? asset($websiteSettings->logo_alt_url ?: $websiteSettings->logo_url) : null;
+
+        $mail = (new MailMessage)
+            ->subject('Contul tău a fost creat - ' . $businessName)
             ->greeting('Salut ' . $notifiable->name . ',')
             ->line('Ne bucurăm să te avem printre clienții noștri!')
-            ->line('Ți-am creat automat un cont pe platforma noastră pentru a-ți putea gestiona programările, a vedea istoricul vizitelor și a beneficia de sistemul nostru de fidelitate.')
+            ->line('Ți-am creat automat un cont pe platforma ' . $businessName . ' pentru a-ți putea gestiona programările, a vedea istoricul vizitelor și a beneficia de sistemul nostru de fidelitate.')
             ->line('Datele tale de autentificare sunt:')
             ->line('**Email:** ' . $notifiable->email)
             ->line('**Parolă:** ' . $this->password)
             ->action('Autentificare', route('login'))
             ->line('Te rugăm să îți schimbi parola după prima autentificare din secțiunea profilului tău pentru o siguranță sporită.')
-            ->line('Îți mulțumim că ne-ai ales!');
+            ->line('Îți mulțumim că ne-ai ales!')
+            ->salutation('Cu drag, echipa ' . $businessName);
+
+        // Notă: Imaginea va fi încărcată de client de la URL dacă setările SMTP permit HTML
+        // Laravel's default notification template supports markdown and captures the app name.
+        
+        return $mail;
     }
 
     /**

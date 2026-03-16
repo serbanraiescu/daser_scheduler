@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\User;
 use App\Models\Service;
 
+// Cod dashboard administrare
 class DashboardController extends Controller
 {
     public function index()

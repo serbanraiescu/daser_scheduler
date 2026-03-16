@@ -22,7 +22,9 @@
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in-up delay-300">
                 <a href="{{ route('bookings.index') }}" class="group relative inline-flex items-center justify-center px-10 py-5 font-black text-white bg-[var(--primary-color)] rounded-full overflow-hidden shadow-2xl shadow-[var(--primary-color)]/30 hover:scale-105 transition-all">
-                    <span class="relative z-10 uppercase tracking-widest text-sm">Programează-te acum</span>
+                    <span class="relative z-10 uppercase tracking-widest text-sm text-center leading-tight">
+                        {{ $settings->hero_button_text ?? 'Programează-te acum' }}
+                    </span>
                     <div class="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                 </a>
                 <a href="#services" class="inline-flex items-center px-10 py-5 font-bold text-white border-2 border-white/30 rounded-full hover:bg-white hover:text-black transition-all">
@@ -41,8 +43,13 @@
     @if($settings->show_services_section && count($services) > 0)
     <section id="services" class="py-[80px] bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-4 italic uppercase">Servicii de Top</h2>
+            <div class="text-center mb-16 px-4">
+                <h2 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-4 italic uppercase leading-tight">
+                    {{ $settings->services_title ?? 'Servicii de Top' }}
+                </h2>
+                @if($settings->services_subtitle)
+                    <p class="text-gray-500 font-bold uppercase tracking-widest text-sm mb-6">{{ $settings->services_subtitle }}</p>
+                @endif
                 <div class="w-20 h-1.5 bg-[var(--secondary-color)] mx-auto rounded-full"></div>
             </div>
 
@@ -77,18 +84,22 @@
     @endif
 
     <!-- Team Section -->
-    @if(count($employees) > 0)
+    @if($settings->show_team_section && count($employees) > 0)
     <section id="team" class="py-[100px] bg-gray-900 text-white overflow-hidden relative">
         <div class="absolute -top-24 -right-24 w-96 h-96 bg-[var(--primary-color)]/20 rounded-full blur-[120px]"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                 <div class="max-w-xl">
-                    <h2 class="text-4xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-6">Maeștrii Stilizării</h2>
-                    <p class="text-xl text-gray-400 font-medium">O echipă de profesioniști pregătiți să transforme fiecare programare într-o operă de artă.</p>
+                    <h2 class="text-4xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-6">
+                        {{ $settings->team_title ?? 'Maeștrii Stilizării' }}
+                    </h2>
+                    <p class="text-xl text-gray-400 font-medium">
+                        {{ $settings->team_subtitle ?? 'O echipă de profesioniști pregătiți să transforme fiecare programare într-o operă de artă.' }}
+                    </p>
                 </div>
                 <div class="pb-2">
                     <a href="{{ route('bookings.index') }}" class="inline-flex items-center text-[var(--secondary-color)] font-black uppercase tracking-[0.2em] group border-b-2 border-transparent hover:border-[var(--secondary-color)] pb-2 transition-all">
-                        Rezervă cu expertul tău <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        {{ $settings->team_reservation_text ?? 'Rezervă cu expertul tău' }} <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                 </div>
             </div>
@@ -112,11 +123,16 @@
     @endif
 
     <!-- Gallery Section -->
+    @if($settings->show_gallery_section)
     <section class="py-[80px] bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-4 italic uppercase">Portofoliu Vizual</h2>
-                <p class="text-gray-500 font-bold uppercase tracking-widest text-sm">Rezultate care vorbesc de la sine</p>
+            <div class="text-center mb-16 px-4">
+                <h2 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-4 italic uppercase leading-tight">
+                    {{ $settings->gallery_title ?? 'Portofoliu Vizual' }}
+                </h2>
+                <p class="text-gray-500 font-bold uppercase tracking-widest text-sm">
+                    {{ $settings->gallery_subtitle ?? 'Rezultate care vorbesc de la sine' }}
+                </p>
             </div>
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
@@ -126,19 +142,25 @@
                             <svg class="w-10 h-10 text-white/10" fill="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
                         <div class="absolute inset-0 bg-[var(--primary-color)]/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                            <span class="text-white font-black uppercase tracking-widest text-sm">Zoom View</span>
+                            <span class="text-white font-black uppercase tracking-widest text-sm text-center px-2">
+                                {{ $settings->gallery_zoom_text ?? 'Zoom View' }}
+                            </span>
                         </div>
                     </div>
                 @endfor
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Reviews Section -->
+    @if($settings->show_reviews_section)
     <section class="py-[100px] bg-gray-50 border-y border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-4 italic uppercase italic leading-none">Clienți Mulțumiți</h2>
+            <div class="text-center mb-16 px-4">
+                <h2 class="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter mb-4 italic uppercase italic leading-tight">
+                    {{ $settings->reviews_title ?? 'Clienți Mulțumiți' }}
+                </h2>
                 <div class="flex justify-center gap-1 text-[var(--secondary-color)]">
                     @for($i = 0; $i < 5; $i++)
                         <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -173,14 +195,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div>
-                    <h2 class="text-5xl md:text-7xl font-black text-gray-900 tracking-tighter italic uppercase leading-tight mb-8">Te Așteptăm în Salon</h2>
+                    <h2 class="text-5xl md:text-7xl font-black text-gray-900 tracking-tighter italic uppercase leading-tight mb-8">
+                        {{ $settings->contact_title ?? 'Te Așteptăm în Salon' }}
+                    </h2>
                     <ul class="space-y-8 mb-12">
                         <li class="flex items-start">
                             <div class="w-14 h-14 rounded-2xl bg-[var(--primary-color)] flex items-center justify-center mr-6 shrink-0 shadow-lg shadow-[var(--primary-color)]/20">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                             </div>
                             <div>
-                                <span class="text-xs font-black text-[var(--secondary-color)] uppercase tracking-widest mb-1 block">Locație Premium</span>
+                                <span class="text-xs font-black text-[var(--secondary-color)] uppercase tracking-widest mb-1 block">
+                                    {{ $settings->contact_label_location ?? 'Locație Premium' }}
+                                </span>
                                 <span class="text-2xl font-bold text-gray-900 leading-tight block">{{ $settings->address ?? 'Strada Victoriei nr. 10, București' }}</span>
                             </div>
                         </li>
@@ -189,19 +215,21 @@
                                 <svg class="w-7 h-7 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             </div>
                             <div>
-                                <span class="text-xs font-black text-gray-400 uppercase tracking-widest mb-1 block">Contact Rapid</span>
+                                <span class="text-xs font-black text-gray-400 uppercase tracking-widest mb-1 block">
+                                    {{ $settings->contact_label_phone ?? 'Contact Rapid' }}
+                                </span>
                                 <span class="text-2xl font-bold text-gray-900 leading-tight block">{{ $settings->phone ?? '+40 722 000 000' }}</span>
                             </div>
                         </li>
                     </ul>
-                    <div class="flex items-center gap-6">
+                    <div class="flex flex-wrap items-center gap-6">
                         @if($settings->phone)
                             <a href="tel:{{ $settings->phone }}" class="inline-flex items-center px-8 py-4 border-2 border-gray-900 rounded-full text-sm font-black uppercase tracking-widest hover:bg-gray-900 hover:text-white transition-all">
-                                Sună Acum
+                                {{ $settings->contact_button_call_text ?? 'Sună Acum' }}
                             </a>
                         @endif
                         <a href="{{ route('bookings.index') }}" class="inline-flex items-center text-gray-900 font-black uppercase tracking-widest group">
-                            Rezervă Online <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            {{ $settings->contact_button_book_text ?? 'Rezervă Online' }} <svg class="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                     </div>
                 </div>

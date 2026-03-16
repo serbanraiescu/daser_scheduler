@@ -6,21 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('meta_title', $settings->seo_title ?? $settings->business_name ?? config('app.name', 'Laravel'))</title>
-    <meta name="description" content="@yield('meta_description', $settings->seo_description ?? '')">
-
-    <!-- Fonts -->
+    <title>@yield('title', $settings->seo_title ?? ($settings->business_name ? $settings->business_name . ' - Scheduler' : 'Scheduler'))</title>
+    <meta name="description" content="@yield('meta_description', $settings->seo_description ?? 'Sistem de programări online profesional pentru salonul tău.')">
+    
+    <!-- Dynamic Google Fonts -->
+    @php
+        $primaryFont = $settings->primary_font ?? 'Inter';
+        $secondaryFont = $settings->secondary_font ?? 'Inter';
+        $fonts = array_unique([$primaryFont, $secondaryFont]);
+        $fontParam = implode('&family=', array_map(fn($f) => str_replace(' ', '+', $f) . ':wght@300;400;500;600;700;800;900', $fonts));
+    @endphp
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family={{ $fontParam }}&display=swap" rel="stylesheet">
 
     <!-- Dynamic Styles -->
     <style>
         :root {
-            --primary-color: {{ $settings->primary_color ?? '#1a1a1a' }};
-            --secondary-color: {{ $settings->secondary_color ?? '#d4af37' }};
+            --primary-color: {{ $settings->primary_color ?? '#6366f1' }};
+            --secondary-color: {{ $settings->secondary_color ?? '#a855f7' }};
+            --primary-font: '{{ $primaryFont }}', sans-serif;
+            --secondary-font: '{{ $secondaryFont }}', sans-serif;
+            --border-radius: {{ $settings->border_radius ?? '1.5rem' }};
+            --section-padding: {{ $settings->section_padding ?? '80px' }};
         }
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: var(--primary-font);
+        }
+
+        .font-secondary {
+            font-family: var(--secondary-font);
+        }
+
+        /* Border Radius Overrides */
+        .rounded-custom { border-radius: var(--border-radius); }
+        .rounded-l-custom { border-top-left-radius: var(--border-radius); border-bottom-left-radius: var(--border-radius); }
+        .rounded-r-custom { border-top-right-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius); }
+        
+        section {
+            padding-top: var(--section-padding);
+            padding-bottom: var(--section-padding);
+        }
+
+        /* Custom CSS Injection */
+        {!! $settings->custom_css !!}
         .glass-nav {
             @apply bg-white/80 backdrop-blur-lg border-b border-gray-100/50;
         }
@@ -88,9 +118,15 @@
                         $navScrolled = "text-gray-600 hover:text-[var(--primary-color)]";
                         $navTop = "text-white/90 hover:text-white";
                     @endphp
-                    <a href="#services" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Servicii</a>
-                    <a href="#team" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Echipa</a>
-                    <a href="#contact" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Contact</a>
+                    @if($settings->show_services_section)
+                        <a href="#services" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Servicii</a>
+                    @endif
+                    @if($settings->show_team_section)
+                        <a href="#team" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Echipa</a>
+                    @endif
+                    @if($settings->show_contact_section)
+                        <a href="#contact" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">Contact</a>
+                    @endif
                     @if(isset($pagesHeader))
                         @foreach($pagesHeader as $headerPage)
                             <a href="{{ url('/page/' . $headerPage->slug) }}" :class="scrolled ? '{{ $navScrolled }}' : '{{ $navTop }}'" class="{{ $navClasses }}">{{ $headerPage->title }}</a>
@@ -134,9 +170,15 @@
                         @click.away="open = false" 
                         class="fixed top-24 left-4 right-4 bg-white rounded-3xl border border-gray-100 shadow-2xl p-6 space-y-4 flex flex-col items-center text-center z-[100]"
                     >
-                        <a href="#services" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Servicii</a>
-                        <a href="#team" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Echipa</a>
-                        <a href="#contact" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Contact</a>
+                        @if($settings->show_services_section)
+                            <a href="#services" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Servicii</a>
+                        @endif
+                        @if($settings->show_team_section)
+                            <a href="#team" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Echipa</a>
+                        @endif
+                        @if($settings->show_contact_section)
+                            <a href="#contact" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">Contact</a>
+                        @endif
                         @if(isset($pagesHeader))
                             @foreach($pagesHeader as $headerPage)
                                 <a href="{{ url('/page/' . $headerPage->slug) }}" @click="open = false" class="block text-xl font-bold text-gray-900 py-2">{{ $headerPage->title }}</a>

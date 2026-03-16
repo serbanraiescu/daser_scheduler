@@ -1,3 +1,4 @@
+{{-- Cod dashboard client --}}
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-black text-2xl text-gray-900 leading-tight">

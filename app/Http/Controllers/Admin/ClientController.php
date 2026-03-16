@@ -11,6 +11,7 @@ use App\Models\Voucher;
 use App\Models\ClientVoucher;
 use Illuminate\Support\Str;
 
+// Cod administrare clienti
 class ClientController extends Controller
 {
     public function index(Request $request)
