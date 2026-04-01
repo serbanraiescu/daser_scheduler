@@ -16,6 +16,17 @@ class Setting extends Model
 
     public static function setValue($key, $value)
     {
-        self::updateOrCreate(['key' => $key], ['value' => $value]);
+        try {
+            $result = self::updateOrCreate(['key' => $key], ['value' => $value]);
+            
+            if (str_contains($key, 'license_')) {
+                \Log::info("Setting updated: {$key} = " . (str_contains($key, 'password') || str_contains($key, 'key') ? '***' : $value));
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            \Log::error("Failed to save setting {$key}: " . $e->getMessage());
+            return false;
+        }
     }
 }

@@ -23,15 +23,17 @@ class LicenseService
             $status = Setting::getValue('license_status', 'pending');
             $lastCheck = Setting::getValue('license_last_check');
             $daysLeft = Setting::getValue('license_days_left', 30);
+            $key = Setting::getValue('license_key');
             
+            \Log::info("License Check (getStatus): Status={$status}, LastCheck={$lastCheck}, Key=" . ($key ? 'Configured' : 'Missing'));
+
             $isGrace = false;
             $graceDaysLeft = 0;
 
             if ($lastCheck) {
-                $lastCheckDate = Carbon::parse($lastCheck);
+                $lastCheckDate = \Carbon\Carbon::parse($lastCheck);
                 $diffHours = $lastCheckDate->diffInHours(now());
                 
-                // If it's more than 12h but strictly less than 48h, it's considered grace if unreachable
                 if ($diffHours > self::CHECK_INTERVAL && $diffHours <= self::GRACE_PERIOD) {
                     $isGrace = true;
                     $graceDaysLeft = round((self::GRACE_PERIOD - $diffHours) / 24, 1);
@@ -44,7 +46,7 @@ class LicenseService
                 'days_left' => (int) $daysLeft,
                 'is_grace' => $isGrace,
                 'grace_days_left' => $graceDaysLeft,
-                'key' => Setting::getValue('license_key'),
+                'key' => $key,
             ];
         });
     }
@@ -55,7 +57,10 @@ class LicenseService
     public function sync()
     {
         $key = Setting::getValue('license_key');
+        \Log::info("License Sync Started: Key=" . ($key ? 'present' : 'missing'));
+
         if (!$key) {
+            \Log::warning("License Sync Aborted: No key configured.");
             return ['error' => 'No license key configured.'];
         }
 
@@ -67,8 +72,8 @@ class LicenseService
 
             if ($response->successful()) {
                 $data = $response->json();
+                \Log::info("License Sync Successful: ResponseData=" . json_encode($data));
                 
-                // Expected response: { status: 'active'|'denied', days_left: int }
                 Setting::setValue('license_status', $data['status'] ?? 'denied');
                 Setting::setValue('license_days_left', $data['days_left'] ?? 0);
                 Setting::setValue('license_last_check', now()->toDateTimeString());
@@ -77,8 +82,10 @@ class LicenseService
                 return ['success' => true, 'data' => $data];
             }
 
+            \Log::error("License Sync Failed: Master App returned {$response->status()}");
             return ['error' => 'Master App returned an error: ' . $response->status()];
         } catch (\Exception $e) {
+            \Log::error("License Sync Failed: Exception=" . $e->getMessage());
             return ['error' => 'Could not connect to Master App: ' . $e->getMessage()];
         }
     }
@@ -90,22 +97,40 @@ class LicenseService
     {
         $data = $this->getStatus();
         
+        // If status is hard-denied, block immediately
         if ($data->status === 'denied') {
+            \Log::warning("License blocking: Status is DENIED.");
             return false;
         }
 
-        // If it's pending and we have no last check, we should probably try to sync once
-        if ($data->status === 'pending' && !$data->last_check) {
+        // Calculate hours since last sync
+        $hoursSinceLastSync = 999; 
+        if ($data->last_check) {
+            $hoursSinceLastSync = \Carbon\Carbon::parse($data->last_check)->diffInHours(now());
+        }
+
+        \Log::info("License Accessibility Check: Status={$data->status}, HoursSinceSync={$hoursSinceLastSync}");
+
+        // PROACTIVE SYNC: If it's been more than 12h, try a background sync
+        if ($hoursSinceLastSync > self::CHECK_INTERVAL || ($data->status === 'pending' && !$data->last_check)) {
+            \Log::info("License: Triggering proactive sync (Interval reached or pending).");
             $result = $this->sync();
-            if (isset($result['success']) && $result['data']['status'] === 'active') {
-                return true;
+            
+            // If we just synced, re-fetch data internally
+            if (isset($result['success'])) {
+                $data->status = $result['data']['status'] ?? $data->status;
+                $hoursSinceLastSync = 0;
             }
+        }
+
+        // BLOCKING LOGIC: Only block if status is denied OR we are past the 48h grace period
+        if ($hoursSinceLastSync > self::GRACE_PERIOD) {
+            \Log::error("License blocking: Sync grace period exceeded (48h). Last sync was {$hoursSinceLastSync} hours ago.");
             return false;
         }
 
-        // If we are past the grace period (48h offline)
-        if ($data->last_check && Carbon::parse($data->last_check)->diffInHours(now()) > self::GRACE_PERIOD) {
-            return false;
+        if ($data->status === 'denied') {
+             return false;
         }
 
         return true;
